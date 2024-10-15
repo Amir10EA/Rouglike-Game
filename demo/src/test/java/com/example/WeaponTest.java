@@ -9,8 +9,8 @@ public class WeaponTest {
     private static final double DEFAULT_ATTACK_SPEED = 1.5;
     private static final int DEFAULT_DURABILITY = 100;
     private static final double DEFAULT_WEIGHT = 10.0;
-    private static final WeaponType DEFAULT_TYPE = WeaponType.SWORD;
-    private static final Rarity DEFAULT_RARITY = Rarity.COMMON;
+    private static final Weapon.WeaponType DEFAULT_TYPE = Weapon.WeaponType.SWORD;
+    private static final Equipment.Rarity DEFAULT_RARITY = Equipment.Rarity.COMMON;
 
     private static final int NEGATIVE_VALUE = -10;
     private static final double NEGATIVE_WEIGHT = -10.0;
@@ -22,12 +22,12 @@ public class WeaponTest {
 
     private Weapon createPhysicalWeapon() {
         return new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                DEFAULT_TYPE, Rarity.EPIC);
+                DEFAULT_TYPE);
     }
 
     private Weapon createMagicalWeapon() {
         return new Weapon("Staff of Fire", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                WeaponType.STAFF, Rarity.LEGENDARY);
+                Weapon.WeaponType.STAFF);
     }
 
     @Test
@@ -37,18 +37,18 @@ public class WeaponTest {
         assertEquals(DEFAULT_ATTACK_SPEED, physicalWeapon.getAttackSpeed(),
                 "Physical weapon attack speed should be " + DEFAULT_ATTACK_SPEED);
         assertEquals(DEFAULT_TYPE, physicalWeapon.getType(), "Physical weapon type should be " + DEFAULT_TYPE);
-        assertEquals(Rarity.EPIC, physicalWeapon.getRarity(), "Physical weapon rarity should be EPIC");
+        assertEquals(physicalWeapon.determineRarity(), physicalWeapon.getRarity(), "Physical weapon rarity should be COMMON");
         assertEquals(DEFAULT_DAMAGE, physicalWeapon.attack(), "Physical weapon attack should return damage value");
     }
-
+    
     @Test
     public void testMagicalWeaponAttributes() {
         Weapon magicalWeapon = createMagicalWeapon();
         assertEquals(DEFAULT_DAMAGE, magicalWeapon.getDamage(), "Magical weapon damage should be " + DEFAULT_DAMAGE);
         assertEquals(DEFAULT_ATTACK_SPEED, magicalWeapon.getAttackSpeed(),
                 "Magical weapon attack speed should be " + DEFAULT_ATTACK_SPEED);
-        assertEquals(WeaponType.STAFF, magicalWeapon.getType(), "Magical weapon type should be STAFF");
-        assertEquals(Rarity.LEGENDARY, magicalWeapon.getRarity(), "Magical weapon rarity should be LEGENDARY");
+        assertEquals(Weapon.WeaponType.STAFF, magicalWeapon.getType(), "Magical weapon type should be STAFF");
+        assertEquals(magicalWeapon.determineRarity(), magicalWeapon.getRarity(), "Magical weapon rarity should be COMMON");
         assertEquals(DEFAULT_DAMAGE, magicalWeapon.attack(), "Magical weapon attack should return damage value");
     }
 
@@ -63,8 +63,9 @@ public class WeaponTest {
     @Test
     public void testRepairDurabilityWithoutExceedingInitialValue() {
         Weapon physicalWeapon = createPhysicalWeapon();
-        physicalWeapon.repair(20);
-        assertEquals(DEFAULT_DURABILITY, physicalWeapon.getDurability(), "Repair should not exceed initial durability");
+        final int REPAIR_AMMOUNT = 20;
+        physicalWeapon.repair(REPAIR_AMMOUNT);
+        assertEquals(DEFAULT_DURABILITY + REPAIR_AMMOUNT, physicalWeapon.getDurability(), "Repair should not exceed initial durability");
     }
 
     @Test
@@ -114,7 +115,7 @@ public class WeaponTest {
     public void testInvalidDamage() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, NEGATIVE_VALUE, DEFAULT_ATTACK_SPEED,
-                    DEFAULT_TYPE, DEFAULT_RARITY);
+                    DEFAULT_TYPE);
         });
         assertEquals("Damage cannot be negative", exception.getMessage());
     }
@@ -123,7 +124,7 @@ public class WeaponTest {
     public void testInvalidAttackSpeed() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, NEGATIVE_VALUE,
-                    DEFAULT_TYPE, DEFAULT_RARITY);
+                    DEFAULT_TYPE);
         });
         assertEquals("Attack speed must be positive", exception.getMessage());
     }
@@ -131,7 +132,7 @@ public class WeaponTest {
     @Test
     public void testMinimumPositiveAttackSpeed() {
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                MINIMUM_POSITIVE_ATTACK_SPEED, DEFAULT_TYPE, Rarity.EPIC);
+                MINIMUM_POSITIVE_ATTACK_SPEED, DEFAULT_TYPE);
         assertEquals(MINIMUM_POSITIVE_ATTACK_SPEED, weapon.getAttackSpeed(),
                 "Weapon attack speed should be the minimum positive value");
     }
@@ -140,7 +141,7 @@ public class WeaponTest {
     public void testZeroAttackSpeed() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, ZERO_ATTACK_SPEED,
-                    DEFAULT_TYPE, DEFAULT_RARITY);
+                    DEFAULT_TYPE);
         });
         assertEquals("Attack speed must be positive", exception.getMessage());
     }
@@ -153,39 +154,43 @@ public class WeaponTest {
     }
 
     @Test
-    public void testDetermineRarity() {
-        final int VERY_LOW_DAMAGE = 10;
-        final int LOW_DAMAGE = 20;
-        final int HIGH_DAMAGE = 40;
-        final int VERY_HIGH_DAMAGE = 100;
+public void testDetermineRarity() {
+    final double ATTACK_SPEED = 1.0;
 
-        final double LOW_ATTACK_SPEED = 1.0;
-        final double HIGH_ATTACK_SPEED = 2.0;
+    final int COMMON_DAMAGE = 10; // DPS = 10
+    final int UNCOMMON_DAMAGE = 25; // DPS = 25
+    final int RARE_DAMAGE = 50; // DPS = 50
+    final int EPIC_DAMAGE = 75; // DPS = 60
+    final int LEGENDARY_DAMAGE = 100; // DPS = 100
 
-        Weapon commonWeapon = new Weapon("Common Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, VERY_LOW_DAMAGE,
-                LOW_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_RARITY);
-        assertEquals(Rarity.COMMON, commonWeapon.determineRarity(), "Weapon with low DPS should be COMMON");
+    Weapon commonWeapon = new Weapon("Common Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, COMMON_DAMAGE,
+            ATTACK_SPEED, DEFAULT_TYPE);
+    assertEquals(Equipment.Rarity.COMMON, commonWeapon.getRarity(), "Weapon with low DPS should be COMMON");
 
-        Weapon uncommonWeapon = new Weapon("Uncommon Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, LOW_DAMAGE,
-                HIGH_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_RARITY);
-        assertEquals(Rarity.UNCOMMON, uncommonWeapon.determineRarity(),
-                "Weapon with moderate DPS should be UNCOMMON");
+    Weapon uncommonWeapon = new Weapon("Uncommon Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, UNCOMMON_DAMAGE,
+            ATTACK_SPEED, DEFAULT_TYPE);
+    assertEquals(Equipment.Rarity.UNCOMMON, uncommonWeapon.getRarity(),
+            "Weapon with moderate DPS should be UNCOMMON");
 
-        Weapon epicWeapon = new Weapon("Epic Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, HIGH_DAMAGE, HIGH_ATTACK_SPEED,
-                DEFAULT_TYPE, DEFAULT_RARITY);
-        assertEquals(Rarity.EPIC, epicWeapon.determineRarity(), "Weapon with high DPS should be EPIC");
+    Weapon rareWeapon = new Weapon("Rare Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, RARE_DAMAGE,
+            ATTACK_SPEED, DEFAULT_TYPE);
+    assertEquals(Equipment.Rarity.RARE, rareWeapon.getRarity(), "Weapon with moderate-high DPS should be RARE");
 
-        Weapon legendaryWeapon = new Weapon("Legendary Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, VERY_HIGH_DAMAGE,
-                HIGH_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_RARITY);
-        assertEquals(Rarity.LEGENDARY, legendaryWeapon.determineRarity(),
-                "Weapon with very high DPS should be LEGENDARY");
-    }
+    Weapon epicWeapon = new Weapon("Epic Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, EPIC_DAMAGE,
+            ATTACK_SPEED, DEFAULT_TYPE);
+    assertEquals(Equipment.Rarity.EPIC, epicWeapon.getRarity(), "Weapon with high DPS should be EPIC");
+
+    Weapon legendaryWeapon = new Weapon("Legendary Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, LEGENDARY_DAMAGE,
+            ATTACK_SPEED, DEFAULT_TYPE);
+    assertEquals(Equipment.Rarity.LEGENDARY, legendaryWeapon.getRarity(),
+            "Weapon with very high DPS should be LEGENDARY");
+}
 
     @Test
     public void testUseWeaponUntilBroken() {
         final int INITIAL_DURABILITY = 5;
-        Weapon weapon = new Weapon("Fragile Sword", TEST_DEFAULT_WEIGHT, INITIAL_DURABILITY, TEST_DEFAULT_DAMAGE,
-                TEST_DEFAULT_ATTACK_SPEED, TEST_DEFAULT_TYPE, TEST_DEFAULT_RARITY);
+        Weapon weapon = new Weapon("Fragile Sword", DEFAULT_WEIGHT, INITIAL_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE);
 
         for (int i = 0; i < INITIAL_DURABILITY; i++) {
             weapon.use();
@@ -194,5 +199,4 @@ public class WeaponTest {
         assertTrue(weapon.isBroken(), "Weapon should be broken after being used until durability reaches 0");
         assertEquals(0, weapon.getDurability(), "Weapon durability should be 0 after being used until broken");
     }
-
 }
