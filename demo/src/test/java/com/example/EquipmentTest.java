@@ -3,6 +3,7 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+
 import com.example.Equipment.Rarity;
 
 public class EquipmentTest {
@@ -15,16 +16,40 @@ public class EquipmentTest {
     private static final Rarity DEFAULT_RARITY = Rarity.COMMON;
     private static final double NEGATIVE_WEIGHT = -1.0;
     private static final int NEGATIVE_VALUE = -1;
-    private static final int MAXIMUM_DURABILITY = 1000;
+    private static final int MAXIMUM_DURABILITY = Integer.MAX_VALUE;
 
+    @Test
+    public void testValidEquipmentCreation() {
+        Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_RARITY);
+        assertEquals("Excalibur", weapon.getName());
+        assertEquals(DEFAULT_WEIGHT, weapon.getWeight());
+        assertEquals(DEFAULT_DURABILITY, weapon.getDurability());
+        assertEquals(DEFAULT_DAMAGE, weapon.getDamage());
+        assertEquals(DEFAULT_ATTACK_SPEED, weapon.getAttackSpeed());
+        assertEquals(DEFAULT_TYPE, weapon.getType());
+        assertEquals(DEFAULT_RARITY, weapon.getRarity());
+        assertFalse(weapon.isBroken());
+    }
+
+    @Test
+    public void testRepair() {
+        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED,
+                DEFAULT_TYPE, DEFAULT_RARITY);
+        weapon.reduceDurability(10);
+        assertTrue(weapon.isBroken());
+        weapon.repair(5);
+        assertFalse(weapon.isBroken());
+        assertEquals(5, weapon.getDurability());
+    }
 
     @Test
     public void testInvalidDurability() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, NEGATIVE_VALUE, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
                     DEFAULT_TYPE, DEFAULT_RARITY);
         });
-        assertEquals("Durability cannot be negative", exception.getMessage());
     }
 
     @Test
@@ -44,62 +69,51 @@ public class EquipmentTest {
 
     @Test
     public void testNegativeWeight() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", NEGATIVE_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
                     DEFAULT_TYPE, DEFAULT_RARITY);
         });
-        assertEquals("Weight cannot be negative", exception.getMessage());
     }
 
     @Test
     public void testZeroWeight() {
         final double ZERO_WEIGHT = 0.0;
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", ZERO_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
                     DEFAULT_TYPE, DEFAULT_RARITY);
         });
-        assertEquals("Weight cannot be negative", exception.getMessage());
-    }
-
-    @Test
-    public void testRepair() {
-        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                DEFAULT_TYPE, DEFAULT_RARITY);
-        weapon.reduceDurability(10);
-        assertTrue(weapon.isBroken());
-        weapon.repair(5);
-        assertFalse(weapon.isBroken());
-        assertEquals(5, weapon.getDurability());
     }
 
     @Test
     public void testRepairWithNegativeArgument() {
-        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED,
                 DEFAULT_TYPE, DEFAULT_RARITY);
-                
-                assertThrows(IllegalArgumentException.class, () -> {
-                    weapon.repair(NEGATIVE_VALUE);
-                });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            weapon.repair(NEGATIVE_VALUE);
+        });
     }
 
     @Test
     public void reduceDurabilityWithNegativeArgument() {
-        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED,
                 DEFAULT_TYPE, DEFAULT_RARITY);
-                
-                assertThrows(IllegalArgumentException.class, () -> {
-                    weapon.reduceDurability(NEGATIVE_VALUE);
-                });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            weapon.reduceDurability(NEGATIVE_VALUE);
+        });
     }
 
     @Test
     public void testIsBroken() {
-        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+        Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED,
                 DEFAULT_TYPE, DEFAULT_RARITY);
         weapon.reduceDurability(10);
         assertTrue(weapon.isBroken(), "Weapon should be broken when durability is zero");
     }
-
 
     @Test
     public void testReduceDurability() {

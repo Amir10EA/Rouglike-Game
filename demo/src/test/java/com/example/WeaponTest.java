@@ -128,13 +128,6 @@ public class WeaponTest {
         assertEquals("Attack speed must be positive", exception.getMessage());
     }
 
-    // @Test
-    // public void testMaximumDurability() {
-    //     Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, MAXIMUM_DURABILITY, DEFAULT_DAMAGE,
-    //             DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, Rarity.EPIC);
-    //     assertEquals(MAXIMUM_DURABILITY, weapon.getDurability(), "Weapon durability should be at maximum value");
-    // }
-
     @Test
     public void testMinimumPositiveAttackSpeed() {
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
@@ -142,23 +135,6 @@ public class WeaponTest {
         assertEquals(MINIMUM_POSITIVE_ATTACK_SPEED, weapon.getAttackSpeed(),
                 "Weapon attack speed should be the minimum positive value");
     }
-
-    // @Test
-    // public void testZeroDurability() {
-    //     final int ZERO_DURABILITY = 0;
-    //     Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, ZERO_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-    //             DEFAULT_TYPE, Rarity.EPIC);
-    //     assertTrue(weapon.isBroken(), "Weapon should be broken when durability is zero");
-    // }
-
-    // @Test
-    // public void testInvalidDurability() {
-    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         new Weapon("Invalid Weapon", DEFAULT_WEIGHT, NEGATIVE_VALUE, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-    //                 DEFAULT_TYPE, DEFAULT_RARITY);
-    //     });
-    //     assertEquals("Durability cannot be negative", exception.getMessage());
-    // }
 
     @Test
     public void testZeroAttackSpeed() {
@@ -168,25 +144,6 @@ public class WeaponTest {
         });
         assertEquals("Attack speed must be positive", exception.getMessage());
     }
-
-    // @Test
-    // public void testNegativeWeight() {
-    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         new Weapon("Invalid Weapon", NEGATIVE_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-    //                 DEFAULT_TYPE, DEFAULT_RARITY);
-    //     });
-    //     assertEquals("Weight cannot be negative", exception.getMessage());
-    // }
-
-    // @Test
-    // public void testZeroWeight() {
-    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         final double ZERO_WEIGHT = 0.0;
-    //         new Weapon("Invalid Weapon", ZERO_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-    //                 DEFAULT_TYPE, DEFAULT_RARITY);
-    //     });
-    //     assertEquals("Weight cannot be negative", exception.getMessage());
-    // }
 
     @Test
     public void testCalculateDPS() {
@@ -237,6 +194,5 @@ public class WeaponTest {
         assertTrue(weapon.isBroken(), "Weapon should be broken after being used until durability reaches 0");
         assertEquals(0, weapon.getDurability(), "Weapon durability should be 0 after being used until broken");
     }
-
 
 }
