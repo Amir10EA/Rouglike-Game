@@ -2,11 +2,10 @@ package com.example;
 
 public abstract class Equipment {
 
-   private int durability;
-   private double weight;
-   private Rarity rarity;
-   private boolean isBroken;
-
+    private int durability;
+    private double weight;
+    private Rarity rarity;
+    private boolean isBroken;
 
     public Equipment(int durability, double weight, Rarity rarity) {
         this.durability = durability;
@@ -30,7 +29,7 @@ public abstract class Equipment {
         return rarity;
     }
 
-    public boolean isBroken(){
+    public boolean isBroken() {
         return isBroken;
     }
 
@@ -42,7 +41,7 @@ public abstract class Equipment {
     }
 
     public void reduceDurability(int amount) {
-        if(durability - amount < 0) {
+        if (durability - amount < 0) {
             durability = 0;
             isBroken = true;
         } else {
@@ -51,6 +50,5 @@ public abstract class Equipment {
     }
 
     public abstract void determineRarity();
-    
 
 }

@@ -3,7 +3,6 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-
 import com.example.Equipment.Rarity;
 
 public class EquipmentTest {
@@ -30,6 +29,22 @@ public class EquipmentTest {
         assertEquals(DEFAULT_TYPE, weapon.getType());
         assertEquals(DEFAULT_RARITY, weapon.getRarity());
         assertFalse(weapon.isBroken());
+    }
+
+    @Test
+    public void testNameCannotBeNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Weapon(null, DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+                    DEFAULT_TYPE, DEFAULT_RARITY);
+        });
+    }
+
+    @Test
+    public void testNameCannotBeEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Weapon("", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+                    DEFAULT_TYPE, DEFAULT_RARITY);
+        });
     }
 
     @Test
