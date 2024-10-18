@@ -1,16 +1,19 @@
 package com.example;
 
 public class Weapon extends Equipment {
+    private static final int MAX_DAMAGE = 200;
+    private static final double MAX_ATTACK_SPEED = 3.0;
+
     private int damage;
     private double attackSpeed;
     private WeaponType type;
 
     public Weapon(String name, double weight, int durability, int damage, double attackSpeed, WeaponType type) {
         super(name, weight, durability);
-        if (damage < 0)
-            throw new IllegalArgumentException("Damage cannot be negative");
-        if (attackSpeed <= 0)
-            throw new IllegalArgumentException("Attack speed must be positive");
+        if (damage < 0 || damage > MAX_DAMAGE)
+            throw new IllegalArgumentException("Damage must be between 0 and " + MAX_DAMAGE);
+        if (attackSpeed <= 0 || attackSpeed > MAX_ATTACK_SPEED)
+            throw new IllegalArgumentException("Attack speed must be between 0 and " + MAX_ATTACK_SPEED);
 
         this.damage = damage;
         this.attackSpeed = attackSpeed;
@@ -34,7 +37,6 @@ public class Weapon extends Equipment {
         return damage;
     }
 
-
     public int calculateDamage() {
         return (int) (damage * attackSpeed);
     }
@@ -52,6 +54,16 @@ public class Weapon extends Equipment {
         }
     }
 
+    public void upgrade(int additionalDamage, double additionalAttackSpeed) {
+        if (damage < MAX_DAMAGE) {
+            damage = Math.min(MAX_DAMAGE, damage + additionalDamage);
+        }
+        if (attackSpeed < MAX_ATTACK_SPEED) {
+            attackSpeed = Math.min(MAX_ATTACK_SPEED, attackSpeed + additionalAttackSpeed);
+        }
+        setRarity(determineRarity());
+    }
+
     @Override
     public Rarity determineRarity() {
         double dps = calculateDPS();
@@ -67,6 +79,4 @@ public class Weapon extends Equipment {
             return Rarity.LEGENDARY;
         }
     }
-
-    
 }
