@@ -18,10 +18,6 @@ public class Weapon extends Equipment {
         setRarity(determineRarity());
     }
 
-    public enum WeaponType {
-        SWORD, AXE, MACE, SPEAR, DAGGER, STAFF, WAND
-    }
-
     public int getDamage() {
         return damage;
     }
@@ -71,4 +67,6 @@ public class Weapon extends Equipment {
             return Rarity.LEGENDARY;
         }
     }
+
+    
 }

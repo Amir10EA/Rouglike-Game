@@ -3,15 +3,13 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.example.Weapon.WeaponType;
-
 public class WeaponTest {
 
     private static final int DEFAULT_DAMAGE = 50;
     private static final double DEFAULT_ATTACK_SPEED = 1.5;
     private static final int DEFAULT_DURABILITY = 100;
     private static final double DEFAULT_WEIGHT = 10.0;
-    private static final Weapon.WeaponType DEFAULT_TYPE = Weapon.WeaponType.SWORD;
+    private static final WeaponType DEFAULT_TYPE = WeaponType.SWORD;
     private static final Equipment.Rarity DEFAULT_RARITY = Equipment.Rarity.COMMON;
 
     private static final int NEGATIVE_VALUE = -10;
@@ -26,29 +24,30 @@ public class WeaponTest {
     private static final int EXPECTED_DPS = (int) (DEFAULT_DAMAGE * DEFAULT_ATTACK_SPEED);
 
     @Test
-public void testAllWeaponTypesCreation() {
-    for (Weapon.WeaponType type : Weapon.WeaponType.values()) {
-        Weapon weapon = new Weapon("TestWeapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED, type);
+    public void testAllWeaponTypesCreation() {
+        for (WeaponType type : WeaponType.values()) {
+            Weapon weapon = new Weapon("TestWeapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                    DEFAULT_ATTACK_SPEED, type);
 
-        assertNotNull(weapon);
-        assertEquals("TestWeapon", weapon.getName());
-        assertEquals(DEFAULT_WEIGHT, weapon.getWeight());
-        assertEquals(DEFAULT_DURABILITY, weapon.getDurability());
-        assertEquals(DEFAULT_DAMAGE, weapon.getDamage());
-        assertEquals(DEFAULT_ATTACK_SPEED, weapon.getAttackSpeed());
-        assertEquals(type, weapon.getType());
-        assertEquals(type.getDamageType(), weapon.getType().getDamageType());
+            assertNotNull(weapon);
+            assertEquals("TestWeapon", weapon.getName());
+            assertEquals(DEFAULT_WEIGHT, weapon.getWeight());
+            assertEquals(DEFAULT_DURABILITY, weapon.getDurability());
+            assertEquals(DEFAULT_DAMAGE, weapon.getDamage());
+            assertEquals(DEFAULT_ATTACK_SPEED, weapon.getAttackSpeed());
+            assertEquals(type, weapon.getType());
+            assertEquals(type.getDamageType(), weapon.getType().getDamageType());
+        }
     }
-}
 
     private Weapon createPhysicalWeapon() {
         return new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-            WeaponType.SWORD);
+                WeaponType.SWORD);
     }
 
     private Weapon createMagicalWeapon() {
         return new Weapon("Staff of Fire", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-            WeaponType.STAFF);
+                WeaponType.STAFF);
     }
 
     @Test
@@ -218,54 +217,86 @@ public void testAllWeaponTypesCreation() {
 
     @Test
     public void testUpgradeIncreasesDamageAndAttackSpeed() {
-    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_TYPE);
-    weapon.upgrade(5, 0.1);
-    assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
-    assertEquals(DEFAULT_ATTACK_SPEED + 0.1, weapon.getAttackSpeed(), "Attack speed should increase by 0.1 after upgrade");
-}
+        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE);
+        weapon.upgrade(5, 0.1);
+        assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+        assertEquals(DEFAULT_ATTACK_SPEED + 0.1, weapon.getAttackSpeed(),
+                "Attack speed should increase by 0.1 after upgrade");
+    }
 
-@Test
-public void testUpgradeJustBelowMaxDamage() {
-    int initialDamage = MAX_DAMAGE - 5;
-    Weapon weapon = new Weapon("High Damage Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage, DEFAULT_ATTACK_SPEED, DEFAULT_TYPE);
-    weapon.upgrade(10, 0.1); // Attempt to increase damage by 10
-    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should not exceed max limit after upgrade");
-}
+    @Test
+    public void testUpgradeJustBelowMaxDamage() {
+        int initialDamage = MAX_DAMAGE - 5;
+        Weapon weapon = new Weapon("High Damage Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE);
+        weapon.upgrade(10, 0.1);
+        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should not exceed max limit after upgrade");
+    }
 
-@Test
-public void testUpgradeJustBelowMaxAttackSpeed() {
-    double initialAttackSpeed = MAX_ATTACK_SPEED - 0.1;
-    Weapon weapon = new Weapon("High Speed Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, initialAttackSpeed, DEFAULT_TYPE);
-    weapon.upgrade(5, 0.2); // Attempt to increase attack speed by 0.2
-    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should not exceed max limit after upgrade");
-}
+    @Test
+    public void testUpgradeJustBelowMaxAttackSpeed() {
+        double initialAttackSpeed = MAX_ATTACK_SPEED - 0.1;
+        Weapon weapon = new Weapon("High Speed Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                initialAttackSpeed, DEFAULT_TYPE);
+        weapon.upgrade(5, 0.2);
+        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(),
+                "Attack speed should not exceed max limit after upgrade");
+    }
 
-@Test
-public void testUpgradeWhenAttackSpeedMaxButNotDamage() {
-    int initialDamage = DEFAULT_DAMAGE;
-    double initialAttackSpeed = MAX_ATTACK_SPEED;
-    Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage, initialAttackSpeed, DEFAULT_TYPE);
-    weapon.upgrade(5, 0.1); // Attempt to increase damage by 5 and attack speed by 0.1
-    assertEquals(initialDamage + 5, weapon.getDamage(), "Damage should increase by 5");
-    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
-}
+    @Test
+    public void testUpgradeWhenAttackSpeedMaxButNotDamage() {
+        int initialDamage = DEFAULT_DAMAGE;
+        double initialAttackSpeed = MAX_ATTACK_SPEED;
+        Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+                initialAttackSpeed, DEFAULT_TYPE);
+        weapon.upgrade(5, 0.1);
+        assertEquals(initialDamage + 5, weapon.getDamage(), "Damage should increase by 5");
+        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
+    }
 
-@Test
-public void testUpgradeWhenDamageMaxButNotAttackSpeed() {
-    int initialDamage = MAX_DAMAGE;
-    double initialAttackSpeed = DEFAULT_ATTACK_SPEED;
-    Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage, initialAttackSpeed, DEFAULT_TYPE);
-    weapon.upgrade(5, 0.1); // Attempt to increase damage by 5 and attack speed by 0.1
-    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
-    assertEquals(initialAttackSpeed + 0.1, weapon.getAttackSpeed(), "Attack speed should increase by 0.1");
-}
+    @Test
+    public void testUpgradeWhenDamageMaxButNotAttackSpeed() {
+        int initialDamage = MAX_DAMAGE;
+        double initialAttackSpeed = DEFAULT_ATTACK_SPEED;
+        Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+                initialAttackSpeed, DEFAULT_TYPE);
+        weapon.upgrade(5, 0.1);
+        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
+        assertEquals(initialAttackSpeed + 0.1, weapon.getAttackSpeed(), "Attack speed should increase by 0.1");
+    }
 
-@Test
-public void testUpgradeNotPossibleWhenMaxed() {
-    Weapon weapon = new Weapon("Maxed Out Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, MAX_DAMAGE, MAX_ATTACK_SPEED, DEFAULT_TYPE);
-    weapon.upgrade(5, 0.1); // Attempt to upgrade when both damage and attack speed are maxed
-    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
-    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
-}
+    @Test
+    public void testUpgradeNotPossibleWhenMaxed() {
+        Weapon weapon = new Weapon("Maxed Out Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, MAX_DAMAGE, MAX_ATTACK_SPEED,
+                DEFAULT_TYPE);
+        weapon.upgrade(5, 0.1);
+        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
+        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
+    }
 
+    @Test
+    public void testUpgradeDoesNotChangeRarityWhenDPSRemainsInSameRange() {
+        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 20, 1.0, DEFAULT_TYPE); // Initial
+                                                                                                                    // DPS
+                                                                                                                    // =
+                                                                                                                    // 20
+        weapon.upgrade(5, 0.1); // New DPS = 27.5
+        assertEquals(25, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+        assertEquals(1.1, weapon.getAttackSpeed(), "Attack speed should increase by 0.1 after upgrade");
+        assertEquals(Equipment.Rarity.UNCOMMON, weapon.getRarity(), "Rarity should remain UNCOMMON based on new DPS");
+    }
+
+    @Test
+    public void testUpgradeIncreasesBothDamageAndAttackSpeedAndUpdatesRarity() {
+        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 20, 1.0, DEFAULT_TYPE); // Initial
+                                                                                                                    // DPS
+                                                                                                                    // =
+                                                                                                                    // 20
+        weapon.upgrade(30, 1.0); // New DPS = 100
+        assertEquals(50, weapon.getDamage(), "Damage should increase by 30 after upgrade");
+        assertEquals(2.0, weapon.getAttackSpeed(), "Attack speed should increase by 1.0 after upgrade");
+        assertEquals(Equipment.Rarity.LEGENDARY, weapon.getRarity(),
+                "Rarity should update to LEGENDARY based on new DPS");
+    }
 }
