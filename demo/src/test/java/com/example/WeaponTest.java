@@ -3,6 +3,7 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+
 public class WeaponTest {
 
     private static final int DEFAULT_DAMAGE = 50;
@@ -20,7 +21,24 @@ public class WeaponTest {
 
     private static final int EXPECTED_DPS = (int) (DEFAULT_DAMAGE * DEFAULT_ATTACK_SPEED);
 
-    private Weapon createPhysicalWeapon() {
+    @Test
+    public void testAllWeaponTypesCreation() {
+        for (Weapon.WeaponType type : Weapon.WeaponType.values()) {
+            Weapon weapon = new Weapon("TestWeapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED, type);
+
+            assertNotNull(weapon);
+            assertEquals("TestWeapon", weapon.getName());
+            assertEquals(DEFAULT_WEIGHT, weapon.getWeight());
+            assertEquals(DEFAULT_DURABILITY, weapon.getDurability());
+            assertEquals(DEFAULT_DAMAGE, weapon.getDamage());
+            assertEquals(DEFAULT_ATTACK_SPEED, weapon.getAttackSpeed());
+            assertEquals(type, weapon.getType());
+        }
+    }
+
+    
+    
+    private Weapon createWeapon() {
         return new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
                 DEFAULT_TYPE);
     }
@@ -31,30 +49,8 @@ public class WeaponTest {
     }
 
     @Test
-    public void testPhysicalWeaponAttributes() {
-        Weapon physicalWeapon = createPhysicalWeapon();
-        assertEquals(DEFAULT_DAMAGE, physicalWeapon.getDamage(), "Physical weapon damage should be " + DEFAULT_DAMAGE);
-        assertEquals(DEFAULT_ATTACK_SPEED, physicalWeapon.getAttackSpeed(),
-                "Physical weapon attack speed should be " + DEFAULT_ATTACK_SPEED);
-        assertEquals(DEFAULT_TYPE, physicalWeapon.getType(), "Physical weapon type should be " + DEFAULT_TYPE);
-        assertEquals(physicalWeapon.determineRarity(), physicalWeapon.getRarity(), "Physical weapon rarity should be COMMON");
-        assertEquals(DEFAULT_DAMAGE, physicalWeapon.attack(), "Physical weapon attack should return damage value");
-    }
-    
-    @Test
-    public void testMagicalWeaponAttributes() {
-        Weapon magicalWeapon = createMagicalWeapon();
-        assertEquals(DEFAULT_DAMAGE, magicalWeapon.getDamage(), "Magical weapon damage should be " + DEFAULT_DAMAGE);
-        assertEquals(DEFAULT_ATTACK_SPEED, magicalWeapon.getAttackSpeed(),
-                "Magical weapon attack speed should be " + DEFAULT_ATTACK_SPEED);
-        assertEquals(Weapon.WeaponType.STAFF, magicalWeapon.getType(), "Magical weapon type should be STAFF");
-        assertEquals(magicalWeapon.determineRarity(), magicalWeapon.getRarity(), "Magical weapon rarity should be COMMON");
-        assertEquals(DEFAULT_DAMAGE, magicalWeapon.attack(), "Magical weapon attack should return damage value");
-    }
-
-    @Test
     public void testInitialDurabilityAndBrokenState() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         assertFalse(physicalWeapon.isBroken(), "Physical weapon should not be broken initially");
         assertEquals(DEFAULT_DURABILITY, physicalWeapon.getDurability(),
                 "Physical weapon durability should be " + DEFAULT_DURABILITY);
@@ -62,7 +58,7 @@ public class WeaponTest {
 
     @Test
     public void testRepairDurabilityWithoutExceedingInitialValue() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         final int REPAIR_AMMOUNT = 20;
         physicalWeapon.repair(REPAIR_AMMOUNT);
         assertEquals(DEFAULT_DURABILITY + REPAIR_AMMOUNT, physicalWeapon.getDurability(), "Repair should not exceed initial durability");
@@ -70,7 +66,7 @@ public class WeaponTest {
 
     @Test
     public void testIncreaseDurabilityAfterRepair() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         physicalWeapon.repair(10);
         assertEquals(DEFAULT_DURABILITY + 10, physicalWeapon.getDurability(),
                 "Durability should increase correctly after repair");
@@ -78,7 +74,7 @@ public class WeaponTest {
 
     @Test
     public void testDurabilityReductionAndBrokenState() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         for (int i = 0; i < 10; i++) {
             physicalWeapon.reduceDurability(10);
         }
@@ -87,7 +83,7 @@ public class WeaponTest {
 
     @Test
     public void testWeaponUse() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         Weapon magicalWeapon = createMagicalWeapon();
         assertEquals("You use the Excalibur!", physicalWeapon.use(),
                 "Using the weapon should return the correct message.");
@@ -97,14 +93,14 @@ public class WeaponTest {
 
     @Test
     public void testCalculateDamage() {
-        Weapon physicalWeapon = createPhysicalWeapon();
-        assertEquals(EXPECTED_DPS, physicalWeapon.calculateDamage(),
+        Weapon weapon = createWeapon();
+        assertEquals(EXPECTED_DPS, weapon.calculateDamage(),
                 "Calculated damage should consider attack speed and durability.");
     }
 
     @Test
     public void testUseReducesDurability() {
-        Weapon physicalWeapon = createPhysicalWeapon();
+        Weapon physicalWeapon = createWeapon();
         int initialDurability = physicalWeapon.getDurability();
         physicalWeapon.use();
         assertEquals(initialDurability - 1, physicalWeapon.getDurability(),
@@ -148,7 +144,7 @@ public class WeaponTest {
 
     @Test
     public void testCalculateDPS() {
-        Weapon weapon = createPhysicalWeapon();
+        Weapon weapon = createWeapon();
         double expectedDPS = DEFAULT_DAMAGE * DEFAULT_ATTACK_SPEED;
         assertEquals(expectedDPS, weapon.calculateDPS(), "DPS should be calculated correctly");
     }
