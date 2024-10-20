@@ -6,12 +6,14 @@ public class Player {
     private int health;
     private int level;
     // Add x and y coordinates after
+    private Race race;
 
 
-    public Player(String name, int health, int level) {
+    public Player(String name, int health, int level, Race race) {
         this.name = name;
         this.health = health;
         this.level = level;
+        this.race = race;
     }
 
     public String getName() {
@@ -26,6 +28,10 @@ public class Player {
         return level;
     }
 
+    public Race getRace() {
+        return race;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -36,5 +42,9 @@ public class Player {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
     }
 }
