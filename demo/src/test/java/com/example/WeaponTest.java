@@ -150,11 +150,11 @@ public class WeaponTest {
     public void testDetermineRarity() {
         final double ATTACK_SPEED = 1.0;
 
-        final int COMMON_DAMAGE = 10; // DPS = 10
-        final int UNCOMMON_DAMAGE = 25; // DPS = 25
-        final int RARE_DAMAGE = 50; // DPS = 50
-        final int EPIC_DAMAGE = 75; // DPS = 60
-        final int LEGENDARY_DAMAGE = 100; // DPS = 100
+        final int COMMON_DAMAGE = 10; 
+        final int UNCOMMON_DAMAGE = 25; 
+        final int RARE_DAMAGE = 50; 
+        final int EPIC_DAMAGE = 75; 
+        final int LEGENDARY_DAMAGE = 100; 
 
         Weapon commonWeapon = new Weapon("Common Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, COMMON_DAMAGE,
                 ATTACK_SPEED, DEFAULT_TYPE);
