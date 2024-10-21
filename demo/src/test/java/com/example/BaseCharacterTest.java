@@ -39,5 +39,36 @@ public class BaseCharacterTest {
         assertEquals(20, character.calculateDamage());
     }
 
+    @Test
+    public void testTakeDamage() {
+        character.takeDamage(30);
+        assertEquals(70, character.getHealth());
+        character.takeDamage(100);
+        assertEquals(0, character.getHealth()); // Health should not be negative
+    }
+
+    @Test
+    public void testHeal() {
+        character.takeDamage(50);
+        character.heal(30);
+        assertEquals(80, character.getHealth());
+        character.heal(50);
+        assertEquals(100, character.getHealth()); // Health should not exceed maxHealth
+    }
+
+    @Test
+    public void testAttack() {
+        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5);
+        character.attack(enemy);
+        assertEquals(90, enemy.getHealth());
+    }
+
+    @Test
+    public void testIsAlive() {
+        assertTrue(character.isAlive());
+        character.takeDamage(100);
+        assertFalse(character.isAlive());
+    }
+
     
 }
