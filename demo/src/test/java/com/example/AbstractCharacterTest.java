@@ -19,7 +19,7 @@ public abstract class AbstractCharacterTest {
         assertEquals(100, character.getHealth());
         assertEquals(100, character.getMaxHealth());
         assertEquals(10, character.getStrength());
-        assertEquals(1.0, character.getDamageMultiplier(), 0.01);
+        assertEquals(1.0, ((AbstractCharacter) character).getDamageMultiplier(), 0.01);
     }
 
 }
