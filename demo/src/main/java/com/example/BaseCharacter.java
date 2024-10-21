@@ -51,5 +51,18 @@ public class BaseCharacter{
     public void takeDamage(int amount) {
         setHealth(this.health - amount);
     }
+
+    public void heal(int amount) {
+        setHealth(this.health + amount);
+    }
+
+    public void attack(BaseCharacter enemy) {
+        int damage = calculateDamage();
+        enemy.takeDamage(damage);
+    }
+
+    public boolean isAlive() {
+        return this.health > 0;
+    }
   
 }
