@@ -20,11 +20,18 @@ public class BaseCharacterTest {
         assertEquals(10, character.getStrength());
     } 
 
+    @Test
+    public void testSetHealth() {
+        character.setHealth(80);
+        assertEquals(80, character.getHealth());
+        character.setHealth(-10);
+        assertEquals(0, character.getHealth()); 
+    }
 
     @Test
     public void testSetMaxHealth() {
         character.setMaxHealth(120);
-        assertEquals(100, character.getMaxHealth()); // Max health should not exceed 100
+        assertEquals(100, character.getMaxHealth()); 
     }
 
     @Test
@@ -43,8 +50,12 @@ public class BaseCharacterTest {
     public void testTakeDamage() {
         character.takeDamage(30);
         assertEquals(70, character.getHealth());
-        character.takeDamage(100);
-        assertEquals(0, character.getHealth()); // Health should not be negative
+    }
+
+    @Test
+    public void testTakeDamageMoreThanHealth() {
+        character.takeDamage(150);
+        assertEquals(0, character.getHealth()); 
     }
 
     @Test
@@ -52,8 +63,21 @@ public class BaseCharacterTest {
         character.takeDamage(50);
         character.heal(30);
         assertEquals(80, character.getHealth());
-        character.heal(50);
-        assertEquals(100, character.getHealth()); // Health should not exceed maxHealth
+    }
+
+    @Test
+    public void testHealBeyondMaxHealth() {
+        character.takeDamage(10);
+        character.heal(20);
+        assertEquals(100, character.getHealth()); 
+    }
+
+    @Test
+    public void testHealOnlyWhenAlive() {
+        character.takeDamage(100);
+        assertFalse(character.isAlive());
+        character.heal(20);
+        assertEquals(0, character.getHealth()); // Dead characters should not heal
     }
 
     @Test
