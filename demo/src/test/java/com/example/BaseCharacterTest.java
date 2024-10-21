@@ -77,7 +77,7 @@ public class BaseCharacterTest {
         character.takeDamage(100);
         assertFalse(character.isAlive());
         character.heal(20);
-        assertEquals(0, character.getHealth()); // Dead characters should not heal
+        assertEquals(0, character.getHealth()); 
     }
 
     @Test

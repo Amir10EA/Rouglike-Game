@@ -53,7 +53,12 @@ public class BaseCharacter{
     }
 
     public void heal(int amount) {
-        setHealth(this.health + amount);
+        if(this.isAlive()){
+            this.health += amount;
+            if (this.health > this.maxHealth) {
+                this.health = this.maxHealth;
+            }
+        }
     }
 
     public void attack(BaseCharacter enemy) {
