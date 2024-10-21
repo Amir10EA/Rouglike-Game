@@ -44,5 +44,12 @@ public class BaseCharacter{
         this.strength = strength;
     }
 
+    public int calculateDamage() {
+        return strength;
+    }
+
+    public void takeDamage(int amount) {
+        setHealth(this.health - amount);
+    }
   
 }
