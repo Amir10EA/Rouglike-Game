@@ -8,7 +8,7 @@ public class BaseCharacterTest {
 
     @BeforeEach
     public void setUp() {
-        character = new BaseCharacter("Hero", 100, 10) {};
+        character = new BaseCharacter("Hero", 100, 10);
     }
 
     @Test
@@ -18,6 +18,6 @@ public class BaseCharacterTest {
         assertEquals(100, character.getHealth());
         assertEquals(100, character.getMaxHealth());
         assertEquals(10, character.getStrength());
-    }    
+    } 
     
 }

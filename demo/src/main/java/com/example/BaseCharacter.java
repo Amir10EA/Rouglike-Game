@@ -1,5 +1,5 @@
 package com.example;
 
-public abstract class BaseCharacter implements Character{
+public abstract class BaseCharacter{
   
 }
