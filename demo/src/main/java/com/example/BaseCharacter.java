@@ -62,8 +62,9 @@ public class BaseCharacter{
     }
 
     public void attack(BaseCharacter enemy) {
+       if (this.isAlive()){
         int damage = calculateDamage();
-        enemy.takeDamage(damage);
+        enemy.takeDamage(damage);} 
     }
 
     public boolean isAlive() {
