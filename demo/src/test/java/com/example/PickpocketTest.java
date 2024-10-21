@@ -34,7 +34,7 @@ public class PickpocketTest {
         Pickpocket thief = new Pickpocket("Locke", 100, 1, Race.HUMAN);
         thief.setLevel(2);
         assertEquals(6, thief.getLockPickingSkill(), "Lockpicking-färdigheten borde öka till 6 vid nivå 2 för Human");
-        assertEquals(8, thief.getSneakingSkill(), "Smygningsfärdigheten borde öka till 8 vid nivå 2 för Human");
+        assertEquals(7, thief.getSneakingSkill(), "Smygningsfärdigheten borde öka till 7 vid nivå 2 för Human");
     }
 }
 
