@@ -11,8 +11,8 @@ public class BaseCharacter{
             throw new NullPointerException("Name cannot be null");
         }
         this.name = name;
-        this.health = Math.min(Math.max(health, 0), 100); // Ensure health is between 0 and 100
-        this.maxHealth = 100; // Max health is capped at 100
+        this.health = Math.min(Math.max(health, 0), 100); 
+        this.maxHealth = 100; 
         this.strength = strength;
     }
 
@@ -25,7 +25,7 @@ public class BaseCharacter{
     }
 
     public void setHealth(int health) {
-        this.health = Math.min(Math.max(health, 0), 100); // Ensure health is between 0 and 100
+        this.health = Math.min(Math.max(health, 0), 100); 
     }
 
     public int getMaxHealth() {
@@ -33,7 +33,7 @@ public class BaseCharacter{
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = Math.min(maxHealth, 100); // Max health is capped at 100
+        this.maxHealth = Math.min(maxHealth, 100); 
     }
 
     public int getStrength() {
