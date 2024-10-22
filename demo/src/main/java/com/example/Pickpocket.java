@@ -1,6 +1,6 @@
 package com.example;
 
-public class Pickpocket extends Player{
+public class Pickpocket extends BaseCharacter{
     private int lockPickingSkill;
     private int sneakingSkill;
     private int pickpocketingSkill;
