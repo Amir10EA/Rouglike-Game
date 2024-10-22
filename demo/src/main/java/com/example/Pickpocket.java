@@ -55,6 +55,4 @@ public class Pickpocket extends Player{
         this.sneakingSkill = calculateSneakingSkill(level);
         this.pickpocketingSkill = calculatePickpocketingSkill(level);
     }
-
-
 }
