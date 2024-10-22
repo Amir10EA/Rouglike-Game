@@ -1,3 +1,5 @@
+package com.example;
+
 public class Tile {
     private boolean walkable;
     private boolean visible;

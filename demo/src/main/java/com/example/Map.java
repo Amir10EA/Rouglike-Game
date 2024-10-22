@@ -7,12 +7,16 @@ public class Map {
     private int height;
     private Tile[][] tiles;
     private String environmentType;
+    private static final int MIN_SIZE = 3;
 
     public Map(int width, int height, String environmentType) {
+        if (width < MIN_SIZE || height < MIN_SIZE) {
+            throw new IllegalArgumentException("Map size must be at least " + MIN_SIZE + "x" + MIN_SIZE);
+        }
         this.width = width;
         this.height = height;
-        this.environmentType = environmentType;
         this.tiles = new Tile[width][height];
+        this.environmentType = environmentType;
         initializeMap(); 
     }
 
