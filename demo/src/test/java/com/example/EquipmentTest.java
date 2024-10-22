@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import com.example.Equipment.Rarity;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class EquipmentTest {
     private static final double DEFAULT_WEIGHT = 5.0;
     private static final int DEFAULT_DURABILITY = 100;
@@ -15,17 +18,19 @@ public class EquipmentTest {
     private static final int NEGATIVE_VALUE = -1;
     private static final int MAXIMUM_DURABILITY = Integer.MAX_VALUE;
 
+    private static final Cost DEFAULT_COST = new Cost(100.0, Map.of("Iron Ingot", 3, "Wood", 1));
+
     @Test
     public void testValidEquipmentCreation() {
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
         assertEquals("Excalibur", weapon.getName());
         assertEquals(DEFAULT_WEIGHT, weapon.getWeight());
         assertEquals(DEFAULT_DURABILITY, weapon.getDurability());
         assertEquals(DEFAULT_DAMAGE, weapon.getDamage());
         assertEquals(DEFAULT_ATTACK_SPEED, weapon.getAttackSpeed());
         assertEquals(WeaponType.SWORD, weapon.getType());
-        assertEquals(Rarity.UNCOMMON, weapon.getRarity()); // Assuming default rarity based on DPS
+        assertEquals(Rarity.UNCOMMON, weapon.getRarity()); 
         assertFalse(weapon.isBroken());
     }
 
@@ -33,7 +38,7 @@ public class EquipmentTest {
     public void testNameCannotBeNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon(null, DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                    WeaponType.SWORD);
+                    WeaponType.SWORD, DEFAULT_COST);
         });
     }
 
@@ -41,14 +46,14 @@ public class EquipmentTest {
     public void testNameCannotBeEmpty() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                   WeaponType.SWORD);
+                   WeaponType.SWORD, DEFAULT_COST);
         });
     }
 
     @Test
     public void testRepair() {
         Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
         weapon.reduceDurability(10);
         assertTrue(weapon.isBroken());
         weapon.repair(5);
@@ -60,14 +65,14 @@ public class EquipmentTest {
     public void testInvalidDurability() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, NEGATIVE_VALUE, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                   WeaponType.SWORD);
+                   WeaponType.SWORD, DEFAULT_COST);
         });
     }
 
     @Test
     public void testMaximumDurability() {
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, MAXIMUM_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
         assertEquals(MAXIMUM_DURABILITY, weapon.getDurability(), "Weapon durability should be at maximum value");
     }
 
@@ -75,7 +80,7 @@ public class EquipmentTest {
     public void testZeroDurability() {
         final int ZERO_DURABILITY = 0;
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, ZERO_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                WeaponType.SWORD);
+                WeaponType.SWORD, DEFAULT_COST);
         assertTrue(weapon.isBroken(), "Weapon should be broken when durability is zero");
     }
 
@@ -83,7 +88,7 @@ public class EquipmentTest {
     public void testNegativeWeight() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", NEGATIVE_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                    WeaponType.SWORD);
+                    WeaponType.SWORD, DEFAULT_COST);
         });
     }
 
@@ -92,14 +97,14 @@ public class EquipmentTest {
         final double ZERO_WEIGHT = 0.0;
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", ZERO_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
-                    WeaponType.SWORD);
+                    WeaponType.SWORD, DEFAULT_COST);
         });
     }
 
     @Test
     public void testRepairWithNegativeArgument() {
         Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
 
         assertThrows(IllegalArgumentException.class, () -> {
             weapon.repair(NEGATIVE_VALUE);
@@ -109,7 +114,7 @@ public class EquipmentTest {
     @Test
     public void reduceDurabilityWithNegativeArgument() {
         Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
 
         assertThrows(IllegalArgumentException.class, () -> {
             weapon.reduceDurability(NEGATIVE_VALUE);
@@ -119,7 +124,7 @@ public class EquipmentTest {
     @Test
     public void testIsBroken() {
         Weapon weapon = new Weapon("Test Weapon", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
         weapon.reduceDurability(10);
         assertTrue(weapon.isBroken(), "Weapon should be broken when durability is zero");
     }
@@ -127,7 +132,7 @@ public class EquipmentTest {
     @Test
     public void testReduceDurability() {
         Weapon weapon = new Weapon("Fragile Sword", DEFAULT_WEIGHT, TEN_HP_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, WeaponType.SWORD);
+                DEFAULT_ATTACK_SPEED, WeaponType.SWORD, DEFAULT_COST);
 
         for (int i = 0; i < TEN_HP_DURABILITY; i++) {
             weapon.reduceDurability(1);
