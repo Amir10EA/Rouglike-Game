@@ -8,13 +8,13 @@ public class Weapon extends Equipment {
     private double attackSpeed;
     private WeaponType type;
 
-    public Weapon(String name, double weight, int durability, int damage, double attackSpeed, WeaponType type) {
-        super(name, weight, durability);
+    public Weapon(String name, double weight, int durability, int damage, double attackSpeed, WeaponType type, Cost cost) {
+        super(name, weight, durability, cost);
         if (damage < 0 || damage > MAX_DAMAGE)
             throw new IllegalArgumentException("Damage must be between 0 and " + MAX_DAMAGE);
         if (attackSpeed <= 0 || attackSpeed > MAX_ATTACK_SPEED)
             throw new IllegalArgumentException("Attack speed must be between 0 and " + MAX_ATTACK_SPEED);
-
+            
         this.damage = damage;
         this.attackSpeed = attackSpeed;
         this.type = type;
@@ -54,13 +54,30 @@ public class Weapon extends Equipment {
         }
     }
 
-    public void upgrade(int additionalDamage, double additionalAttackSpeed) {
-        if (damage < MAX_DAMAGE) {
-            damage = Math.min(MAX_DAMAGE, damage + additionalDamage);
+    public void upgrade(int stones, double money) {
+        if (stones < 0 || money < 0) {
+            throw new IllegalArgumentException("Stones and money must be non-negative");
         }
-        if (attackSpeed < MAX_ATTACK_SPEED) {
-            attackSpeed = Math.min(MAX_ATTACK_SPEED, attackSpeed + additionalAttackSpeed);
+    
+        int maxPossibleIncrease = (int) (money / 10); 
+        int actualIncrease = Math.min(stones, maxPossibleIncrease);
+    
+        if (actualIncrease <= 0) {
+            throw new IllegalArgumentException("Not enough stones or money for upgrade");
         }
+    
+        int additionalDamage = actualIncrease / 2; 
+        double additionalAttackSpeed = actualIncrease / 20.0;
+    
+        // Ensure weapon type is valid for upgrade
+        if (!type.getDamageType().equals("Physical") && !type.getDamageType().equals("Magical")) {
+            throw new IllegalArgumentException("Invalid weapon type for upgrade");
+        }
+    
+        // Perform the upgrade
+        damage = Math.min(MAX_DAMAGE, damage + additionalDamage);
+        attackSpeed = Math.min(MAX_ATTACK_SPEED, attackSpeed + additionalAttackSpeed);
+    
         setRarity(determineRarity());
     }
 

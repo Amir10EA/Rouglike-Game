@@ -7,8 +7,8 @@ public class Armor extends Equipment {
     private int magicalDefense;
     private ArmorType armorType;
 
-    public Armor(String name, double weight, int durability, int physicalDefense, int magicalDefense, ArmorType armorType) {
-        super(name, weight, durability);
+    public Armor(String name, double weight, int durability, int physicalDefense, int magicalDefense, ArmorType armorType, Cost cost) {
+        super(name, weight, durability, cost);
         if (physicalDefense < 0 || physicalDefense > MAX_DEFENSE)
             throw new IllegalArgumentException("Physical defense must be between 0 and " + MAX_DEFENSE);
         if (magicalDefense < 0 || magicalDefense > MAX_DEFENSE)
@@ -45,11 +45,27 @@ public class Armor extends Equipment {
         }
     }
 
-    public void upgrade(int additionalPhysicalDefense, int additionalMagicalDefense) {
-        if (additionalPhysicalDefense < 0 || additionalMagicalDefense < 0)
-            throw new IllegalArgumentException("Additional defenses must be non-negative");
-        physicalDefense = Math.min(MAX_DEFENSE, physicalDefense + additionalPhysicalDefense);
-        magicalDefense = Math.min(MAX_DEFENSE, magicalDefense + additionalMagicalDefense);
+    public void upgrade(int armorStones, double money) {
+        if (armorStones < 0 || money < 0) {
+            throw new IllegalArgumentException("Stones and money must be non-negative");
+        }
+
+        int maxPossibleIncrease = (int) (money / 10); 
+        int actualIncrease = Math.min(armorStones, maxPossibleIncrease); 
+
+        if (actualIncrease <= 0) {
+        throw new IllegalArgumentException("Not enough for an upgrade");
+        }
+        int additionalPhysicalDefense = actualIncrease / 2; 
+        int additionalMagicalDefense = actualIncrease / 2; 
+
+        if (armorStones >= actualIncrease && money >= actualIncrease * 10) {
+            physicalDefense = Math.min(MAX_DEFENSE, physicalDefense + additionalPhysicalDefense);
+            magicalDefense = Math.min(MAX_DEFENSE, magicalDefense + additionalMagicalDefense);
+        } else {
+            throw new IllegalArgumentException("Not enough stones or money for upgrade");
+        }
+
         setRarity(determineRarity());
     }
 
@@ -58,7 +74,7 @@ public class Armor extends Equipment {
         int reducedMagicalDamage = (int) (incomingMagicalDamage / (1 + magicalDefense / 100.0));
         return reducedPhysicalDamage + reducedMagicalDamage;
     }
-
+    
     @Override
     public Rarity determineRarity() {
         double totalProtection = calculateTotalProtection();
@@ -75,7 +91,6 @@ public class Armor extends Equipment {
         }
     }
 }
-
 enum ArmorType {
     HELMET, CHESTPLATE, LEGGINGS, BOOTS
 }
