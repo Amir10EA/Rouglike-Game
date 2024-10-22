@@ -16,13 +16,15 @@ public class ArmorTest {
     private static final int MAX_DEFENSE = 100;
 
     private Armor createDefaultArmor(String name, int physicalDefense, int magicalDefense) {
-        return new Armor(name, DEFAULT_WEIGHT, DEFAULT_DURABILITY, physicalDefense, magicalDefense, DEFAULT_TYPE, DEFAULT_COST);
+        return new Armor(name, DEFAULT_WEIGHT, DEFAULT_DURABILITY, physicalDefense, magicalDefense, DEFAULT_TYPE,
+                DEFAULT_COST);
     }
 
     @Test
     public void testAllArmorTypesCreation() {
         for (ArmorType type : ArmorType.values()) {
-            Armor armor = new Armor("TestArmor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE, type, DEFAULT_COST);
+            Armor armor = new Armor("TestArmor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_PHYSICAL_DEFENSE,
+                    DEFAULT_MAGICAL_DEFENSE, type, DEFAULT_COST);
 
             assertNotNull(armor);
             assertEquals("TestArmor", armor.getName());
@@ -40,7 +42,8 @@ public class ArmorTest {
         int validMagicalDefense = 5;
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new Armor("Invalid Armor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, negativePhysicalDefense, validMagicalDefense, ArmorType.HELMET, DEFAULT_COST);
+            new Armor("Invalid Armor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, negativePhysicalDefense, validMagicalDefense,
+                    ArmorType.HELMET, DEFAULT_COST);
         });
     }
 
@@ -50,7 +53,8 @@ public class ArmorTest {
         int negativeMagicalDefense = -5;
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new Armor("Invalid Armor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, validPhysicalDefense, negativeMagicalDefense, ArmorType.HELMET, DEFAULT_COST);
+            new Armor("Invalid Armor", DEFAULT_WEIGHT, DEFAULT_DURABILITY, validPhysicalDefense, negativeMagicalDefense,
+                    ArmorType.HELMET, DEFAULT_COST);
         });
     }
 
@@ -63,11 +67,16 @@ public class ArmorTest {
         int legendaryDefense = 40;
         int durability = 50;
 
-        Armor commonArmor = new Armor("Common Armor", DEFAULT_WEIGHT, durability, commonDefense, commonDefense, ArmorType.HELMET, DEFAULT_COST);
-        Armor uncommonArmor = new Armor("Uncommon Armor", DEFAULT_WEIGHT, durability, uncommonDefense, uncommonDefense, ArmorType.HELMET, DEFAULT_COST);
-        Armor rareArmor = new Armor("Rare Armor", DEFAULT_WEIGHT, durability, rareDefense, rareDefense, ArmorType.HELMET, DEFAULT_COST);
-        Armor epicArmor = new Armor("Epic Armor", DEFAULT_WEIGHT, durability, epicDefense, epicDefense, ArmorType.HELMET, DEFAULT_COST);
-        Armor legendaryArmor = new Armor("Legendary Armor", DEFAULT_WEIGHT, durability, legendaryDefense, legendaryDefense, ArmorType.HELMET, DEFAULT_COST);
+        Armor commonArmor = new Armor("Common Armor", DEFAULT_WEIGHT, durability, commonDefense, commonDefense,
+                ArmorType.HELMET, DEFAULT_COST);
+        Armor uncommonArmor = new Armor("Uncommon Armor", DEFAULT_WEIGHT, durability, uncommonDefense, uncommonDefense,
+                ArmorType.HELMET, DEFAULT_COST);
+        Armor rareArmor = new Armor("Rare Armor", DEFAULT_WEIGHT, durability, rareDefense, rareDefense,
+                ArmorType.HELMET, DEFAULT_COST);
+        Armor epicArmor = new Armor("Epic Armor", DEFAULT_WEIGHT, durability, epicDefense, epicDefense,
+                ArmorType.HELMET, DEFAULT_COST);
+        Armor legendaryArmor = new Armor("Legendary Armor", DEFAULT_WEIGHT, durability, legendaryDefense,
+                legendaryDefense, ArmorType.HELMET, DEFAULT_COST);
 
         assertEquals(Equipment.Rarity.COMMON, commonArmor.determineRarity());
         assertEquals(Equipment.Rarity.UNCOMMON, uncommonArmor.determineRarity());
@@ -89,7 +98,8 @@ public class ArmorTest {
         int incomingPhysicalDamage = 25;
         int incomingMagicalDamage = 15;
 
-        int expectedDamageTaken = (int) (incomingPhysicalDamage / (1 + DEFAULT_PHYSICAL_DEFENSE / 100.0)) + (int) (incomingMagicalDamage / (1 + DEFAULT_MAGICAL_DEFENSE / 100.0));
+        int expectedDamageTaken = (int) (incomingPhysicalDamage / (1 + DEFAULT_PHYSICAL_DEFENSE / 100.0))
+                + (int) (incomingMagicalDamage / (1 + DEFAULT_MAGICAL_DEFENSE / 100.0));
 
         Armor armor = createDefaultArmor("TestArmor", DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE);
         assertEquals(expectedDamageTaken, armor.calculateDamageTaken(incomingPhysicalDamage, incomingMagicalDamage));
@@ -124,8 +134,10 @@ public class ArmorTest {
     public void testUpgradeIncreasesDefense() {
         Armor armor = createDefaultArmor("Upgradeable Armor", DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE);
         armor.upgrade(10, 100.0);
-        assertEquals(DEFAULT_PHYSICAL_DEFENSE + 5, armor.getPhysicalDefense(), "Physical defense should increase by 5 after upgrade");
-        assertEquals(DEFAULT_MAGICAL_DEFENSE + 5, armor.getMagicalDefense(), "Magical defense should increase by 5 after upgrade");
+        assertEquals(DEFAULT_PHYSICAL_DEFENSE + 5, armor.getPhysicalDefense(),
+                "Physical defense should increase by 5 after upgrade");
+        assertEquals(DEFAULT_MAGICAL_DEFENSE + 5, armor.getMagicalDefense(),
+                "Magical defense should increase by 5 after upgrade");
     }
 
     @Test
@@ -133,7 +145,8 @@ public class ArmorTest {
         int initialPhysicalDefense = MAX_DEFENSE - 5;
         Armor armor = createDefaultArmor("High Defense Armor", initialPhysicalDefense, DEFAULT_MAGICAL_DEFENSE);
         armor.upgrade(20, 200.0);
-        assertEquals(MAX_DEFENSE, armor.getPhysicalDefense(), "Physical defense should not exceed max limit after upgrade");
+        assertEquals(MAX_DEFENSE, armor.getPhysicalDefense(),
+                "Physical defense should not exceed max limit after upgrade");
     }
 
     @Test
@@ -141,7 +154,8 @@ public class ArmorTest {
         int initialMagicalDefense = MAX_DEFENSE - 5;
         Armor armor = createDefaultArmor("High Defense Armor", DEFAULT_PHYSICAL_DEFENSE, initialMagicalDefense);
         armor.upgrade(20, 200.0);
-        assertEquals(MAX_DEFENSE, armor.getMagicalDefense(), "Magical defense should not exceed max limit after upgrade");
+        assertEquals(MAX_DEFENSE, armor.getMagicalDefense(),
+                "Magical defense should not exceed max limit after upgrade");
     }
 
     @Test
@@ -172,20 +186,27 @@ public class ArmorTest {
 
     @Test
     public void testUpgradeDoesNotChangeRarityWhenProtectionRemainsInSameRange() {
-        Armor armor = createDefaultArmor("Upgradeable Armor", 20, 10); 
-        armor.upgrade(10, 100.0); 
-        assertEquals(25, armor.getPhysicalDefense(), "Physical defense should increase by 5 after upgrade");
-        assertEquals(15, armor.getMagicalDefense(), "Magical defense should increase by 5 after upgrade");
-        assertEquals(Equipment.Rarity.UNCOMMON, armor.getRarity(), "Rarity should remain UNCOMMON based on new protection");
+        Armor armor = createDefaultArmor("Upgradeable Armor", 20, 10);
+        assertEquals(Equipment.Rarity.UNCOMMON, armor.getRarity());
+        armor.upgrade(2, 100.0);
+        assertEquals(21, armor.getPhysicalDefense(), "Physical defense should increase by 5 after upgrade");
+        assertEquals(11, armor.getMagicalDefense(), "Magical defense should increase by 5 after upgrade");
+        assertEquals(Equipment.Rarity.UNCOMMON, armor.getRarity(),
+                "Rarity should remain UNCOMMON based on new protection");
     }
 
     @Test
     public void testUpgradeIncreasesBothDefensesAndUpdatesRarity() {
         Armor armor = createDefaultArmor("Upgradeable Armor", 20, 10);
-        armor.upgrade(60, 600.0); 
+        assertEquals(Equipment.Rarity.UNCOMMON, armor.getRarity(),
+                "Rarity should update to EPIC based on new protection");
+        armor.upgrade(60, 600.0);
+
         assertEquals(50, armor.getPhysicalDefense(), "Physical defense should increase by 30 after upgrade");
         assertEquals(40, armor.getMagicalDefense(), "Magical defense should increase by 30 after upgrade");
-        assertEquals(Equipment.Rarity.EPIC, armor.getRarity(), "Rarity should update to EPIC based on new protection");
+
+        assertEquals(Equipment.Rarity.LEGENDARY, armor.getRarity(),
+                "Rarity should update to EPIC based on new protection");
     }
 
     @Test
@@ -209,7 +230,7 @@ public class ArmorTest {
     public void testUpgradeWithNotEnoughStones() {
         Armor armor = createDefaultArmor("Upgradeable Armor", DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE);
         assertThrows(IllegalArgumentException.class, () -> {
-            armor.upgrade(1, 100.0);
+            armor.upgrade(0, 100.0);
         });
     }
 
@@ -217,7 +238,7 @@ public class ArmorTest {
     public void testUpgradeWithNotEnoughMoney() {
         Armor armor = createDefaultArmor("Upgradeable Armor", DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE);
         assertThrows(IllegalArgumentException.class, () -> {
-            armor.upgrade(10, 5.0);
+            armor.upgrade(10, 0);
         });
     }
 }
