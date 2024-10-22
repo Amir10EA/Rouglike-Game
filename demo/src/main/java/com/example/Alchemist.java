@@ -1,6 +1,6 @@
 package com.example;
 
-public class Alchemist extends Player {
+public class Alchemist extends BaseCharacter {
     private int alchemySkill;
     private int potionCraftingSkill;
     private int bombThrowingSkill;
