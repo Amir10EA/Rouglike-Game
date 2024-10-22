@@ -5,8 +5,10 @@ public class BaseCharacter{
     private int health;
     private int maxHealth;
     private int strength;
+    private int level;
+    private Race race;
 
-    public BaseCharacter(String name, int health, int strength) {
+    public BaseCharacter(String name, int health, int strength, Race race) {
         if (name == null) {
             throw new NullPointerException("Name cannot be null");
         }
@@ -14,6 +16,7 @@ public class BaseCharacter{
         this.health = Math.min(Math.max(health, 0), 100); 
         this.maxHealth = 100; 
         this.strength = strength;
+        this.race  = race;
     }
 
     public String getName() {
@@ -42,6 +45,22 @@ public class BaseCharacter{
 
     public void setStrength(int strength) {
         this.strength = strength;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public Race getRace(){
+        return race;
+    }
+
+    public void setRace(){
+        this.race = race;
     }
 
     public int calculateDamage() {
