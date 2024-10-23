@@ -34,4 +34,16 @@ public class Player extends BaseCharacter {
         return equipmentManager.getWeapons();
     }
 
+    public void equipWeapon(Weapon weapon) {
+        equipmentManager.equipWeapon(weapon);
+    }
+
+    public void switchWeapon(Weapon weapon) {
+        equipmentManager.switchWeapon(weapon);
+    }
+
+    public Weapon getActiveWeapon() {
+        return equipmentManager.getActiveWeapon();
+    }
+
 }

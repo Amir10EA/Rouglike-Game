@@ -84,7 +84,7 @@ public class PlayerTest {
         player.switchWeapon(sword);
         assertEquals(sword, player.getActiveWeapon());
     }
-    
+
     @Test
     public void testAddMultipleWeaponsWithDifferentNames() {
         player.addWeapon(sword);
@@ -146,7 +146,7 @@ public class PlayerTest {
     public void testEquipWeaponAlreadyEquipped() {
         player.addWeapon(sword);
         player.equipWeapon(sword);
-        player.equipWeapon(sword); // Equip the same weapon again
+        player.equipWeapon(sword);
         assertEquals(sword, player.getActiveWeapon());
     }
 
@@ -165,6 +165,5 @@ public class PlayerTest {
         player.switchWeapon(mace);
         assertEquals(mace, player.getActiveWeapon());
     }
-
 
 }
