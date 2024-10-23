@@ -130,4 +130,41 @@ public class EquipmentManagerTest {
         });
     }   
 
+
+    @Test
+    public void testRemoveNonExistentWeapon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.removeWeapon(axe);
+        }, "Removing a non-existent weapon should throw an IllegalArgumentException.");
+    }
+
+    @Test
+    public void testEquipNonExistentWeapon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.equipWeapon(axe);
+        }, "Equipping a non-existent weapon should throw an IllegalArgumentException.");
+    }
+
+    @Test
+public void testAddWeaponsWithSameName() {
+    equipmentManager.addWeapon(sword);
+    
+    Map<String, Integer> duplicateSwordMaterials = new HashMap<>();
+    duplicateSwordMaterials.put("Iron", 2);
+    Cost duplicateSwordCost = new Cost(10.0, duplicateSwordMaterials);
+    Weapon duplicateSword = new Weapon("Sword", 10, 50, 15, 1.0, WeaponType.SWORD, duplicateSwordCost);
+    
+    assertThrows(IllegalArgumentException.class, () -> {
+        equipmentManager.addWeapon(duplicateSword);
+    }, "Adding a weapon with the same name should throw an IllegalArgumentException.");
+}
+
+    @Test
+    public void testSwitchToSameWeapon() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.equipWeapon(sword);
+        equipmentManager.switchWeapon(sword);
+        assertEquals(sword, equipmentManager.getActiveWeapon(), "Switching to the same weapon should not change the active weapon.");
+    }
+
 }
