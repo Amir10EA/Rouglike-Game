@@ -167,4 +167,35 @@ public void testAddWeaponsWithSameName() {
         assertEquals(sword, equipmentManager.getActiveWeapon(), "Switching to the same weapon should not change the active weapon.");
     }
 
+    @Test
+    public void testRemoveAllWeaponsInReverseOrder() {
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            equipmentManager.addWeapon(weapon);
+        }
+    
+        for (int i = 9; i >= 0; i--) {
+            Weapon weapon = equipmentManager.getWeapons().get(i);
+            equipmentManager.removeWeapon(weapon);
+            assertEquals(i, equipmentManager.getWeapons().size(), "Weapon list should contain " + i + " weapons after removing.");
+        }
+    }
+
+    @Test
+public void testAddWeaponsWithVaryingAttributes() {
+    for (int i = 0; i < 10; i++) {
+        Map<String, Integer> materials = new HashMap<>();
+        materials.put("Material" + i, i + 1);
+        Cost cost = new Cost(10.0, materials);
+        Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+        equipmentManager.addWeapon(weapon);
+        assertEquals(i + 1, equipmentManager.getWeapons().size(), "Weapon list should contain " + (i + 1) + " weapons after adding.");
+    }
+}
+    
+
+
 }
