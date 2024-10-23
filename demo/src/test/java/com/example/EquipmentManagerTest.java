@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 public class EquipmentManagerTest {
     private EquipmentManager equipmentManager;
@@ -17,7 +16,6 @@ public class EquipmentManagerTest {
     public void setUp() {
         equipmentManager = new EquipmentManager();
 
-        // Creating Cost objects for each weapon
         Map<String, Integer> swordMaterials = new HashMap<>();
         swordMaterials.put("Iron", 2);
         Cost swordCost = new Cost(10.0, swordMaterials);
@@ -34,7 +32,6 @@ public class EquipmentManagerTest {
         mace = new Weapon("Mace", 25, 90, 30, 1.0, WeaponType.MACE, maceCost);
     }
 
-    // Test: Adding a weapon successfully
     @Test
     public void testAddWeapon() {
         equipmentManager.addWeapon(sword);
@@ -42,7 +39,6 @@ public class EquipmentManagerTest {
         assertEquals(sword, equipmentManager.getWeapons().get(0), "The added weapon should be the sword.");
     }
 
-    // Test: Adding Axe and Mace
     @Test
     public void testAddAxeAndMace() {
         equipmentManager.addWeapon(axe);
@@ -53,7 +49,6 @@ public class EquipmentManagerTest {
         assertEquals(mace, equipmentManager.getWeapons().get(1), "The second weapon should be the Mace.");
     }
 
-    // Test: Adding a null weapon
     @Test
     public void testAddNullWeapon() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -61,7 +56,6 @@ public class EquipmentManagerTest {
         }, "Adding a null weapon should throw an IllegalArgumentException.");
     }
 
-    // Test: Adding a duplicate weapon
     @Test
     public void testAddDuplicateWeapon() {
         equipmentManager.addWeapon(sword);
@@ -71,7 +65,6 @@ public class EquipmentManagerTest {
         }, "Adding the same weapon should throw an IllegalArgumentException.");
     }
 
-    // Test: Adding multiple weapons
     @Test
     public void testAddMultipleWeapons() {
         equipmentManager.addWeapon(sword);
@@ -80,5 +73,61 @@ public class EquipmentManagerTest {
 
         assertEquals(3, equipmentManager.getWeapons().size(), "Weapon list should contain three weapons after adding Sword, Axe, and Mace.");
     }
+
+    @Test
+    public void testEquipThenRemoveWeapon() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.equipWeapon(sword);
+        assertEquals(sword, equipmentManager.getActiveWeapon(), "Active weapon should be sword.");
+
+        equipmentManager.removeWeapon(sword);
+        assertNull(equipmentManager.getActiveWeapon(), "Active weapon should be null after removal.");
+    }
+
+    @Test
+    public void testRemoveLastWeapon() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.equipWeapon(sword);
+        assertEquals(sword, equipmentManager.getActiveWeapon(), "Active weapon should be the sword.");
+
+        equipmentManager.removeWeapon(sword);
+        assertEquals(0, equipmentManager.getWeapons().size(), "Weapon list should be empty after removing the last weapon.");
+        assertNull(equipmentManager.getActiveWeapon(), "Active weapon should be null after removing the only weapon.");
+    }
+
+    @Test
+    public void testSwitchAndRemoveWeaponSimultaneously() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.addWeapon(axe);
+        equipmentManager.equipWeapon(sword);
+
+        equipmentManager.switchWeapon(axe);
+        equipmentManager.removeWeapon(sword);
+
+        assertEquals(axe, equipmentManager.getActiveWeapon(), "Active weapon should be axe after switching.");
+        assertFalse(equipmentManager.getWeapons().contains(sword));
+    }
+
+    @Test
+    public void testRapidSwitchingBetweenWeapons() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.addWeapon(axe);
+        equipmentManager.equipWeapon(sword);
+
+        for (int i = 0; i < 100; i++) {
+            equipmentManager.switchWeapon(axe);
+            assertEquals(axe, equipmentManager.getActiveWeapon());
+            equipmentManager.switchWeapon(sword);
+            assertEquals(sword, equipmentManager.getActiveWeapon());
+        }
+    }
+
+    @Test
+    public void testSwitchToNonExistentWeapon() {
+        equipmentManager.addWeapon(sword);
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.switchWeapon(axe);
+        });
+    }   
 
 }
