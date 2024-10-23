@@ -72,6 +72,20 @@ public class PlayerTest {
     }
 
     @Test
+    public void testEquipWeapon() {
+        player.addWeapon(sword);
+        player.equipWeapon(sword);
+        assertEquals(sword, player.getActiveWeapon());
+    }
+
+    @Test
+    public void testSwitchWeapon() {
+        player.addWeapon(sword);
+        player.switchWeapon(sword);
+        assertEquals(sword, player.getActiveWeapon());
+    }
+    
+    @Test
     public void testAddMultipleWeaponsWithDifferentNames() {
         player.addWeapon(sword);
         player.addWeapon(axe);
@@ -95,5 +109,62 @@ public class PlayerTest {
 
         assertEquals(0, player.getWeapons().size());
     }
+
+    @Test
+    public void testAddAndEquipMultipleWeapons() {
+        player.addWeapon(sword);
+        player.addWeapon(axe);
+        player.addWeapon(mace);
+
+        player.equipWeapon(sword);
+        assertEquals(sword, player.getActiveWeapon());
+
+        player.equipWeapon(axe);
+        assertEquals(axe, player.getActiveWeapon());
+
+        player.equipWeapon(mace);
+        assertEquals(mace, player.getActiveWeapon());
+    }
+
+    @Test
+    public void testRemoveActiveWeaponAndEquipAnother() {
+        player.addWeapon(sword);
+        player.addWeapon(axe);
+
+        player.equipWeapon(sword);
+        assertEquals(sword, player.getActiveWeapon());
+
+        player.removeWeapon(sword);
+        assertNull(player.getActiveWeapon());
+
+        player.equipWeapon(axe);
+        assertEquals(axe, player.getActiveWeapon());
+    }
+
+
+    @Test
+    public void testEquipWeaponAlreadyEquipped() {
+        player.addWeapon(sword);
+        player.equipWeapon(sword);
+        player.equipWeapon(sword); // Equip the same weapon again
+        assertEquals(sword, player.getActiveWeapon());
+    }
+
+    @Test
+    public void testSwitchBetweenMultipleWeapons() {
+        player.addWeapon(sword);
+        player.addWeapon(axe);
+        player.addWeapon(mace);
+
+        player.switchWeapon(sword);
+        assertEquals(sword, player.getActiveWeapon());
+
+        player.switchWeapon(axe);
+        assertEquals(axe, player.getActiveWeapon());
+
+        player.switchWeapon(mace);
+        assertEquals(mace, player.getActiveWeapon());
+    }
+
 
 }
