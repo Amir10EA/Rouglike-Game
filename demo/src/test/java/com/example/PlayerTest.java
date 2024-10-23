@@ -54,6 +54,46 @@ public class PlayerTest {
     @Test
     public void testGainNegativeExperience() {
         player.gainExperience(-10);
-        assertEquals(0, player.getExperience()); // Experience should not change
+        assertEquals(0, player.getExperience());
     }
+
+    @Test
+    public void testAddWeapon() {
+        player.addWeapon(sword);
+        assertEquals(1, player.getWeapons().size());
+        assertEquals(sword, player.getWeapons().get(0));
+    }
+
+    @Test
+    public void testRemoveWeapon() {
+        player.addWeapon(sword);
+        player.removeWeapon(sword);
+        assertEquals(0, player.getWeapons().size());
+    }
+
+    @Test
+    public void testAddMultipleWeaponsWithDifferentNames() {
+        player.addWeapon(sword);
+        player.addWeapon(axe);
+        player.addWeapon(mace);
+
+        assertEquals(3, player.getWeapons().size());
+        assertTrue(player.getWeapons().contains(sword));
+        assertTrue(player.getWeapons().contains(axe));
+        assertTrue(player.getWeapons().contains(mace));
+    }
+
+    @Test
+    public void testRemoveAllWeapons() {
+        player.addWeapon(sword);
+        player.addWeapon(axe);
+        player.addWeapon(mace);
+
+        player.removeWeapon(sword);
+        player.removeWeapon(axe);
+        player.removeWeapon(mace);
+
+        assertEquals(0, player.getWeapons().size());
+    }
+
 }
