@@ -152,4 +152,31 @@ public class BaseCharacterTest {
         });
     }
 
+    @Test
+    public void testLevelUp() {
+        character.setLevel(5);
+        assertEquals(5, character.getLevel());
+    }
+
+    @Test
+    public void testRaceAssignment() {
+        Race newRace = Race.ELF; 
+        character.setRace(newRace);
+        assertEquals(newRace, character.getRace());
+    }
+
+    @Test
+    public void testSetHealthBeyondBoundaries() {
+        character.setHealth(150);
+        assertEquals(100, character.getHealth());
+        character.setHealth(-50);
+        assertEquals(0, character.getHealth()); 
+    }
+
+    @Test
+    public void testSetNegativeStrength() {
+        character.setStrength(-10);
+        assertEquals(-10, character.getStrength());
+    }
+
 }

@@ -3,7 +3,11 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EquipmentManagerTest {
@@ -129,5 +133,93 @@ public class EquipmentManagerTest {
             equipmentManager.switchWeapon(axe);
         });
     }   
+
+
+    @Test
+    public void testRemoveNonExistentWeapon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.removeWeapon(axe);
+        }, "Removing a non-existent weapon should throw an IllegalArgumentException.");
+    }
+
+    @Test
+    public void testEquipNonExistentWeapon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.equipWeapon(axe);
+        }, "Equipping a non-existent weapon should throw an IllegalArgumentException.");
+    }
+
+    @Test
+public void testAddWeaponsWithSameName() {
+    equipmentManager.addWeapon(sword);
+    
+    Map<String, Integer> duplicateSwordMaterials = new HashMap<>();
+    duplicateSwordMaterials.put("Iron", 2);
+    Cost duplicateSwordCost = new Cost(10.0, duplicateSwordMaterials);
+    Weapon duplicateSword = new Weapon("Sword", 10, 50, 15, 1.0, WeaponType.SWORD, duplicateSwordCost);
+    
+    assertThrows(IllegalArgumentException.class, () -> {
+        equipmentManager.addWeapon(duplicateSword);
+    }, "Adding a weapon with the same name should throw an IllegalArgumentException.");
+}
+
+    @Test
+    public void testSwitchToSameWeapon() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.equipWeapon(sword);
+        equipmentManager.switchWeapon(sword);
+        assertEquals(sword, equipmentManager.getActiveWeapon(), "Switching to the same weapon should not change the active weapon.");
+    }
+
+    @Test
+    public void testRemoveAllWeaponsInReverseOrder() {
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            equipmentManager.addWeapon(weapon);
+        }
+    
+        for (int i = 9; i >= 0; i--) {
+            Weapon weapon = equipmentManager.getWeapons().get(i);
+            equipmentManager.removeWeapon(weapon);
+            assertEquals(i, equipmentManager.getWeapons().size(), "Weapon list should contain " + i + " weapons after removing.");
+        }
+    }
+
+    @Test
+    public void testAddWeaponsWithVaryingAttributes() {
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            equipmentManager.addWeapon(weapon);
+            assertEquals(i + 1, equipmentManager.getWeapons().size(), "Weapon list should contain " + (i + 1) + " weapons after adding.");
+        }
+    }
+
+    @Test
+    public void testRemoveWeaponsInRandomOrder() {
+        List<Weapon> weaponsToAdd = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            weaponsToAdd.add(weapon);
+            equipmentManager.addWeapon(weapon);
+        }
+
+        Collections.shuffle(weaponsToAdd);
+
+        for (int i = 0; i < weaponsToAdd.size(); i++) {
+            Weapon weapon = weaponsToAdd.get(i);
+            equipmentManager.removeWeapon(weapon);
+            assertEquals(weaponsToAdd.size() - i - 1, equipmentManager.getWeapons().size(), 
+                "Weapon list should contain " + (weaponsToAdd.size() - i - 1) + " weapons after removing.");
+        }
+    }    
 
 }
