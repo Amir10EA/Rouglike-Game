@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.List;
+
 public class Player extends BaseCharacter {
     private int experience;
     private EquipmentManager equipmentManager;
@@ -18,6 +20,18 @@ public class Player extends BaseCharacter {
         if (amount > 0) {
             this.experience += amount;
         }
+    }
+
+        public void addWeapon(Weapon weapon) {
+        equipmentManager.addWeapon(weapon);
+    }
+
+    public void removeWeapon(Weapon weapon) {
+        equipmentManager.removeWeapon(weapon);
+    }
+
+    public List<Weapon> getWeapons() {
+        return equipmentManager.getWeapons();
     }
 
 }
