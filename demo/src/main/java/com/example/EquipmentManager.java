@@ -43,9 +43,10 @@ public class EquipmentManager {
             throw new IllegalArgumentException("Weapon not in inventory.");
         }
         weapons.remove(weapon);
-        if (activeWeapon.equals(weapon)) {
+        if (activeWeapon != null && activeWeapon.equals(weapon)) {
             activeWeapon = null;
         }
+        
     }
 
     public void switchWeapon(Weapon weapon) {
