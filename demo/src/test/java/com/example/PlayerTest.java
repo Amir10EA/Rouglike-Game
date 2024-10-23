@@ -42,4 +42,18 @@ public class PlayerTest {
         assertEquals(10, player.getStrength());
         assertEquals(0, player.getExperience());
     }
+
+    @Test
+    public void testGainExperience() {
+        player.gainExperience(50);
+        assertEquals(50, player.getExperience());
+        player.gainExperience(30);
+        assertEquals(80, player.getExperience());
+    }
+
+    @Test
+    public void testGainNegativeExperience() {
+        player.gainExperience(-10);
+        assertEquals(0, player.getExperience()); // Experience should not change
+    }
 }
