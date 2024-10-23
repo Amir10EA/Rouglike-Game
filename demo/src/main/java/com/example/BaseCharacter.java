@@ -59,7 +59,7 @@ public class BaseCharacter{
         return race;
     }
 
-    public void setRace(){
+    public void setRace(Race race){
         this.race = race;
     }
 

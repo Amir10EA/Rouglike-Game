@@ -212,7 +212,6 @@ public void testAddWeaponsWithSameName() {
             equipmentManager.addWeapon(weapon);
         }
 
-        // Shuffle the list to randomize the order of removal
         Collections.shuffle(weaponsToAdd);
 
         for (int i = 0; i < weaponsToAdd.size(); i++) {
