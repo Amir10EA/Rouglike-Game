@@ -14,4 +14,10 @@ public class Player extends BaseCharacter {
         return experience;
     }
 
+    public void gainExperience(int amount) {
+        if (amount > 0) {
+            this.experience += amount;
+        }
+    }
+
 }
