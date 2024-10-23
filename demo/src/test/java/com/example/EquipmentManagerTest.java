@@ -3,31 +3,82 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public class EquipmentManagerTest {
     private EquipmentManager equipmentManager;
     private Weapon sword;
     private Weapon axe;
-    private Weapon bow;
+    private Weapon mace;
 
     @BeforeEach
     public void setUp() {
         equipmentManager = new EquipmentManager();
-        sword = new Weapon("Sword", 15);
-        axe = new Weapon("Axe", 20);
-        bow = new Weapon("Bow", 10);
+
+        // Creating Cost objects for each weapon
+        Map<String, Integer> swordMaterials = new HashMap<>();
+        swordMaterials.put("Iron", 2);
+        Cost swordCost = new Cost(10.0, swordMaterials);
+        sword = new Weapon("Sword", 15, 100, 20, 1.5, WeaponType.SWORD, swordCost);
+
+        Map<String, Integer> axeMaterials = new HashMap<>();
+        axeMaterials.put("Steel", 3);
+        Cost axeCost = new Cost(15.0, axeMaterials);
+        axe = new Weapon("Axe", 20, 80, 25, 1.2, WeaponType.AXE, axeCost);
+
+        Map<String, Integer> maceMaterials = new HashMap<>();
+        maceMaterials.put("Iron", 5);
+        Cost maceCost = new Cost(20.0, maceMaterials);
+        mace = new Weapon("Mace", 25, 90, 30, 1.0, WeaponType.MACE, maceCost);
     }
 
+    // Test: Adding a weapon successfully
     @Test
     public void testAddWeapon() {
         equipmentManager.addWeapon(sword);
-        equipmentManager.addWeapon(axe);
-        List<Weapon> weapons = equipmentManager.getWeapons();
+        assertEquals(1, equipmentManager.getWeapons().size(), "Weapon list should contain one weapon after adding.");
+        assertEquals(sword, equipmentManager.getWeapons().get(0), "The added weapon should be the sword.");
+    }
 
-        assertEquals(2, weapons.size());
-        assertTrue(weapons.contains(sword));
-        assertTrue(weapons.contains(axe));
+    // Test: Adding Axe and Mace
+    @Test
+    public void testAddAxeAndMace() {
+        equipmentManager.addWeapon(axe);
+        equipmentManager.addWeapon(mace);
+
+        assertEquals(2, equipmentManager.getWeapons().size(), "Weapon list should contain two weapons after adding Axe and Mace.");
+        assertEquals(axe, equipmentManager.getWeapons().get(0), "The first weapon should be the Axe.");
+        assertEquals(mace, equipmentManager.getWeapons().get(1), "The second weapon should be the Mace.");
+    }
+
+    // Test: Adding a null weapon
+    @Test
+    public void testAddNullWeapon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.addWeapon(null);
+        }, "Adding a null weapon should throw an IllegalArgumentException.");
+    }
+
+    // Test: Adding a duplicate weapon
+    @Test
+    public void testAddDuplicateWeapon() {
+        equipmentManager.addWeapon(sword);
+        
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.addWeapon(sword);
+        }, "Adding the same weapon should throw an IllegalArgumentException.");
+    }
+
+    // Test: Adding multiple weapons
+    @Test
+    public void testAddMultipleWeapons() {
+        equipmentManager.addWeapon(sword);
+        equipmentManager.addWeapon(axe);
+        equipmentManager.addWeapon(mace);
+
+        assertEquals(3, equipmentManager.getWeapons().size(), "Weapon list should contain three weapons after adding Sword, Axe, and Mace.");
     }
 
 }
