@@ -13,6 +13,15 @@ public class EquipmentManager {
     }
 
     public void addWeapon(Weapon weapon) {
+        if (weapon == null) {
+            throw new IllegalArgumentException("Weapon cannot be null.");
+        }
+        // Check for duplicate weapons
+        for (Weapon w : weapons) {
+            if (w.getName().equals(weapon.getName())) {
+                throw new IllegalArgumentException("Weapon already exists.");
+            }
+        }
         weapons.add(weapon);
     }
 
@@ -23,5 +32,4 @@ public class EquipmentManager {
     public Weapon getActiveWeapon() {
         return activeWeapon;
     }       
-
 }
