@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 public class EquipmentManagerTest {
     private EquipmentManager equipmentManager;
@@ -127,13 +126,8 @@ public class EquipmentManagerTest {
     public void testSwitchToNonExistentWeapon() {
         equipmentManager.addWeapon(sword);
         assertThrows(IllegalArgumentException.class, () -> {
-            equipmentManager.switchWeapon(axe);  // Axe not in inventory
+            equipmentManager.switchWeapon(axe);
         });
-    }
-
-
-    
-
-    
+    }   
 
 }

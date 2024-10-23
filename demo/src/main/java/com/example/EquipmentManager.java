@@ -16,13 +16,46 @@ public class EquipmentManager {
         if (weapon == null) {
             throw new IllegalArgumentException("Weapon cannot be null.");
         }
-        // Check for duplicate weapons
         for (Weapon w : weapons) {
             if (w.getName().equals(weapon.getName())) {
                 throw new IllegalArgumentException("Weapon already exists.");
             }
         }
         weapons.add(weapon);
+    }
+
+
+    public void equipWeapon(Weapon weapon) {
+        if (weapon == null) {
+            throw new IllegalArgumentException("Weapon cannot be null.");
+        }
+        if (!weapons.contains(weapon)) {
+            throw new IllegalArgumentException("Weapon not in inventory.");
+        }
+        activeWeapon = weapon;
+    }
+
+    public void removeWeapon(Weapon weapon) {
+        if (weapon == null) {
+            throw new IllegalArgumentException("Weapon cannot be null.");
+        }
+        if (!weapons.contains(weapon)) {
+            throw new IllegalArgumentException("Weapon not in inventory.");
+        }
+        weapons.remove(weapon);
+        if (activeWeapon.equals(weapon)) {
+            activeWeapon = null;
+        }
+    }
+
+    public void switchWeapon(Weapon weapon) {
+        if (weapon == null) {
+            throw new IllegalArgumentException("Weapon cannot be null.");
+        }
+        if (!weapons.contains(weapon)) {
+            throw new IllegalArgumentException("Weapon not in inventory.");
+        }
+        activeWeapon = weapon;
     }
 
     public List<Weapon> getWeapons() {
