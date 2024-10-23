@@ -3,7 +3,11 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EquipmentManagerTest {
@@ -185,17 +189,38 @@ public void testAddWeaponsWithSameName() {
     }
 
     @Test
-public void testAddWeaponsWithVaryingAttributes() {
-    for (int i = 0; i < 10; i++) {
-        Map<String, Integer> materials = new HashMap<>();
-        materials.put("Material" + i, i + 1);
-        Cost cost = new Cost(10.0, materials);
-        Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
-        equipmentManager.addWeapon(weapon);
-        assertEquals(i + 1, equipmentManager.getWeapons().size(), "Weapon list should contain " + (i + 1) + " weapons after adding.");
+    public void testAddWeaponsWithVaryingAttributes() {
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            equipmentManager.addWeapon(weapon);
+            assertEquals(i + 1, equipmentManager.getWeapons().size(), "Weapon list should contain " + (i + 1) + " weapons after adding.");
+        }
     }
-}
-    
 
+    @Test
+    public void testRemoveWeaponsInRandomOrder() {
+        List<Weapon> weaponsToAdd = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Integer> materials = new HashMap<>();
+            materials.put("Material" + i, i + 1);
+            Cost cost = new Cost(10.0, materials);
+            Weapon weapon = new Weapon("Weapon" + i, 10 + i, 50 + i, 15 + i, 1.0 + (i % 3), WeaponType.SWORD, cost);
+            weaponsToAdd.add(weapon);
+            equipmentManager.addWeapon(weapon);
+        }
+
+        // Shuffle the list to randomize the order of removal
+        Collections.shuffle(weaponsToAdd);
+
+        for (int i = 0; i < weaponsToAdd.size(); i++) {
+            Weapon weapon = weaponsToAdd.get(i);
+            equipmentManager.removeWeapon(weapon);
+            assertEquals(weaponsToAdd.size() - i - 1, equipmentManager.getWeapons().size(), 
+                "Weapon list should contain " + (weaponsToAdd.size() - i - 1) + " weapons after removing.");
+        }
+    }    
 
 }
