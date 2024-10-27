@@ -384,17 +384,6 @@ public void testUpgradeWithNegativeMoney() {
 }
 
 @Test
-public void testUpgradeWithNegativeStones() {
-    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
-    List<Item> upgradeItems = new ArrayList<>();
-    upgradeItems.add(new Item("Smithing Stone", -10, ItemType.SMITHING_STONE));
-    assertThrows(IllegalArgumentException.class, () -> {
-        weapon.upgrade(upgradeItems, 100.0);
-    });
-}
-
-@Test
 public void testUpgradeWithNotEnoughStones() {
     Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
             DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);

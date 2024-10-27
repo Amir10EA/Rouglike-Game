@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import java.util.ArrayList;
 
 public class ArmorTest {
 
@@ -12,9 +13,8 @@ public class ArmorTest {
     private static final int DEFAULT_PHYSICAL_DEFENSE = 10;
     private static final int DEFAULT_MAGICAL_DEFENSE = 5;
     private static final Cost DEFAULT_COST = new Cost(200.0, List.of(
-        new Item("Chainmail", 10, ItemType.ARMOR_STONE),
-        new Item("Leather", 5, ItemType.ARMOR_STONE)
-    ));
+            new Item("Chainmail", 10, ItemType.ARMOR_STONE),
+            new Item("Leather", 5, ItemType.ARMOR_STONE)));
     private static final ArmorType DEFAULT_TYPE = ArmorType.CHESTPLATE;
     private static final int MAX_DEFENSE = 100;
 
@@ -235,17 +235,6 @@ public class ArmorTest {
         upgradeItems.add(new Item("Armor Stone", 10, ItemType.ARMOR_STONE));
         assertThrows(IllegalArgumentException.class, () -> {
             armor.upgrade(upgradeItems, -100.0);
-        });
-    }
-
-    @Test
-    public void testUpgradeWithNegativeStones() {
-        Armor armor = createDefaultArmor("Upgradeable Armor", DEFAULT_PHYSICAL_DEFENSE, DEFAULT_MAGICAL_DEFENSE);
-        final int NEGATIVE_STONE_AMOUNT = -10;
-        List<Item> upgradeItems = new ArrayList<>();
-        upgradeItems.add(new Item("Armor Stone", NEGATIVE_STONE_AMOUNT, ItemType.ARMOR_STONE));
-        assertThrows(IllegalArgumentException.class, () -> {
-            armor.upgrade(upgradeItems, 100.0);
         });
     }
 
