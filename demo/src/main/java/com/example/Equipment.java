@@ -1,6 +1,6 @@
 package com.example;
 
-public abstract class Equipment {
+public abstract class Equipment implements InventoryItem {
     private String name;
     private int durability;
     private double weight;
