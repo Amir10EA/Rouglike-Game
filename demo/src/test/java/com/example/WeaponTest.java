@@ -2,7 +2,11 @@ package com.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
 
 public class WeaponTest {
 
@@ -10,7 +14,8 @@ public class WeaponTest {
     private static final double DEFAULT_ATTACK_SPEED = 1.5;
     private static final int DEFAULT_DURABILITY = 100;
     private static final double DEFAULT_WEIGHT = 10.0;
-    private static final WeaponType DEFAULT_TYPE = WeaponType.SWORD;
+    private static final WeaponType PHYSICAL_TYPE = WeaponType.SWORD;
+    private static final WeaponType MAGICAL_TYPE = WeaponType.STAFF;
     private static final int NEGATIVE_VALUE = -10;
     private static final double ZERO_ATTACK_SPEED = 0.0;
     private static final double MINIMUM_POSITIVE_ATTACK_SPEED = 0.1;
@@ -20,7 +25,10 @@ public class WeaponTest {
 
     private static final int EXPECTED_DPS = (int) (DEFAULT_DAMAGE * DEFAULT_ATTACK_SPEED);
 
-    private static final Cost DEFAULT_COST = new Cost(100, Map.of("Iron Ingot", 3, "Wood", 1));
+    private static final Cost DEFAULT_COST = new Cost(100, List.of(
+        new Item("Iron Ingot", 3, ItemType.SMITHING_STONE),
+        new Item("Wood", 1, ItemType.SMITHING_STONE)
+    ));
 
     @Test
     public void testAllWeaponTypesCreation() {
@@ -113,7 +121,7 @@ public class WeaponTest {
     public void testNegativeDamage() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, NEGATIVE_VALUE, DEFAULT_ATTACK_SPEED,
-                    DEFAULT_TYPE, DEFAULT_COST);
+                    PHYSICAL_TYPE, DEFAULT_COST);
         });
     }
 
@@ -121,14 +129,14 @@ public class WeaponTest {
     public void testNegativeAttackSpeed() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, NEGATIVE_VALUE,
-                    DEFAULT_TYPE, DEFAULT_COST);
+                    PHYSICAL_TYPE, DEFAULT_COST);
         });
     }
 
     @Test
     public void testMinimumPositiveAttackSpeed() {
         Weapon weapon = new Weapon("Excalibur", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                MINIMUM_POSITIVE_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                MINIMUM_POSITIVE_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(MINIMUM_POSITIVE_ATTACK_SPEED, weapon.getAttackSpeed(),
                 "Weapon attack speed should be the minimum positive value");
     }
@@ -137,7 +145,7 @@ public class WeaponTest {
     public void testZeroAttackSpeed() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, ZERO_ATTACK_SPEED,
-                    DEFAULT_TYPE, DEFAULT_COST);
+                    PHYSICAL_TYPE, DEFAULT_COST);
         });
     }
 
@@ -159,24 +167,24 @@ public class WeaponTest {
         final int LEGENDARY_DAMAGE = 100;
 
         Weapon commonWeapon = new Weapon("Common Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, COMMON_DAMAGE,
-                ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(Equipment.Rarity.COMMON, commonWeapon.getRarity(), "Weapon with low DPS should be COMMON");
 
         Weapon uncommonWeapon = new Weapon("Uncommon Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, UNCOMMON_DAMAGE,
-                ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(Equipment.Rarity.UNCOMMON, uncommonWeapon.getRarity(),
                 "Weapon with moderate DPS should be UNCOMMON");
 
         Weapon rareWeapon = new Weapon("Rare Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, RARE_DAMAGE,
-                ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(Equipment.Rarity.RARE, rareWeapon.getRarity(), "Weapon with moderate-high DPS should be RARE");
 
         Weapon epicWeapon = new Weapon("Epic Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, EPIC_DAMAGE,
-                ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(Equipment.Rarity.EPIC, epicWeapon.getRarity(), "Weapon with high DPS should be EPIC");
 
         Weapon legendaryWeapon = new Weapon("Legendary Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, LEGENDARY_DAMAGE,
-                ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
         assertEquals(Equipment.Rarity.LEGENDARY, legendaryWeapon.getRarity(),
                 "Weapon with very high DPS should be LEGENDARY");
     }
@@ -185,7 +193,7 @@ public class WeaponTest {
     public void testUseWeaponUntilBroken() {
         final int INITIAL_DURABILITY = 5;
         Weapon weapon = new Weapon("Fragile Sword", DEFAULT_WEIGHT, INITIAL_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+                DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
 
         for (int i = 0; i < INITIAL_DURABILITY; i++) {
             weapon.use();
@@ -198,7 +206,7 @@ public class WeaponTest {
     public void testOverMaxDamage() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Overpowered Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, MAX_DAMAGE + 1, DEFAULT_ATTACK_SPEED,
-                    DEFAULT_TYPE, DEFAULT_COST);
+                    PHYSICAL_TYPE, DEFAULT_COST);
         });
     }
 
@@ -206,134 +214,194 @@ public class WeaponTest {
     public void testOverMaxAttackSpeed() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("Overpowered Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, MAX_ATTACK_SPEED + 0.1,
-                    DEFAULT_TYPE, DEFAULT_COST);
+                    PHYSICAL_TYPE, DEFAULT_COST);
         });
     }
 
     @Test
-    public void testUpgradeIncreasesDamageAndAttackSpeed() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
+    public void testPhysicalWeaponUpgradeWithSmithingStones() {
+        Weapon weapon = new Weapon("Physical Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+        List<Item> upgradeItems = new ArrayList<>();
+        upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+        weapon.upgrade(upgradeItems, 100.0);
         assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
         assertEquals(DEFAULT_ATTACK_SPEED + 0.5, weapon.getAttackSpeed(),
                 "Attack speed should increase by 0.5 after upgrade");
     }
 
     @Test
-    public void testUpgradeJustBelowMaxDamage() {
-        int initialDamage = MAX_DAMAGE - 5;
-        Weapon weapon = new Weapon("High Damage Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(20, 200.0);
-        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should not exceed max limit after upgrade");
-    }
-
-    @Test
-    public void testUpgradeJustBelowMaxAttackSpeed() {
-        double initialAttackSpeed = MAX_ATTACK_SPEED - 0.1;
-        Weapon weapon = new Weapon("High Speed Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                initialAttackSpeed, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(20, 200.0);
-        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(),
-                "Attack speed should not exceed max limit after upgrade");
-    }
-
-    @Test
-    public void testUpgradeWhenAttackSpeedMaxButNotDamage() {
-        int initialDamage = DEFAULT_DAMAGE;
-        double initialAttackSpeed = MAX_ATTACK_SPEED;
-        Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
-                initialAttackSpeed, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
-        assertEquals(initialDamage + 5, weapon.getDamage(), "Damage should increase by 5");
-        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
-    }
-
-    @Test
-    public void testUpgradeWhenDamageMaxButNotAttackSpeed() {
-        int initialDamage = MAX_DAMAGE;
-        double initialAttackSpeed = DEFAULT_ATTACK_SPEED;
-        Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
-                initialAttackSpeed, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
-        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
-        assertEquals(initialAttackSpeed + 0.5, weapon.getAttackSpeed(), "Attack speed should increase by 0.5");
-    }
-
-    @Test
-    public void testUpgradeNotPossibleWhenMaxed() {
-        Weapon weapon = new Weapon("Maxed Out Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, MAX_DAMAGE, MAX_ATTACK_SPEED,
-                DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
-        assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
-        assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
-    }
-
-    @Test
-    public void testUpgradeDoesNotChangeRarityWhenDPSRemainsInSameRange() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 20, 1.0, DEFAULT_TYPE,
-                DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
-        assertEquals(25, weapon.getDamage(), "Damage should increase by 5 after upgrade");
-        assertEquals(1.5, weapon.getAttackSpeed(), "Attack speed should increase by 0.5 after upgrade");
-        assertEquals(Equipment.Rarity.RARE, weapon.getRarity(), "Rarity should remain UNCOMMON based on new DPS");
-    }
-
-    @Test
-    public void testUpgradeIncreasesBothDamageAndAttackSpeedAndUpdatesRarity() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 10, 1.0, DEFAULT_TYPE,
-                DEFAULT_COST);
-        assertEquals(Equipment.Rarity.COMMON, weapon.getRarity());
-        weapon.upgrade(10, 600.0);
-        assertEquals(15, weapon.getDamage(), "Damage should increase by 30 after upgrade");
-        assertEquals(1.5, weapon.getAttackSpeed(), "Attack speed should increase by 3.0 after upgrade");
-        assertEquals(Equipment.Rarity.UNCOMMON, weapon.getRarity());
-    }
-
-    @Test
-    public void testSuccessfulUpgrade() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
-        weapon.upgrade(10, 100.0);
+    public void testMagicalWeaponUpgradeWithMagicalStones() {
+        Weapon weapon = new Weapon("Magical Staff", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, MAGICAL_TYPE, DEFAULT_COST);
+        List<Item> upgradeItems = new ArrayList<>();
+        upgradeItems.add(new Item("Magical Stone", 10, ItemType.MAGICAL_STONE));
+        weapon.upgrade(upgradeItems, 100.0);
         assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
         assertEquals(DEFAULT_ATTACK_SPEED + 0.5, weapon.getAttackSpeed(),
                 "Attack speed should increase by 0.5 after upgrade");
     }
 
     @Test
-    public void testUpgradeWithNegativeMoney() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+    public void testPhysicalWeaponUpgradeFailsWithMagicalStones() {
+        Weapon weapon = new Weapon("Physical Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+        List<Item> upgradeItems = new ArrayList<>();
+        upgradeItems.add(new Item("Magical Stone", 10, ItemType.MAGICAL_STONE));
         assertThrows(IllegalArgumentException.class, () -> {
-            weapon.upgrade(10, -100.0);
-        });
+            weapon.upgrade(upgradeItems, 100.0);
+        }, "Upgrading a physical weapon with magical stones should fail");
     }
 
     @Test
-    public void testUpgradeWithNegativeStones() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
+    public void testMagicalWeaponUpgradeFailsWithSmithingStones() {
+        Weapon weapon = new Weapon("Magical Staff", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+                DEFAULT_ATTACK_SPEED, MAGICAL_TYPE, DEFAULT_COST);
+        List<Item> upgradeItems = new ArrayList<>();
+        upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
         assertThrows(IllegalArgumentException.class, () -> {
-            weapon.upgrade(-10, 100.0);
-        });
+            weapon.upgrade(upgradeItems, 100.0);
+        }, "Upgrading a magical weapon with smithing stones should fail");
     }
+@Test
+public void testUpgradeIncreasesDamageAndAttackSpeed() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+    assertEquals(DEFAULT_ATTACK_SPEED + 0.5, weapon.getAttackSpeed(),
+            "Attack speed should increase by 0.5 after upgrade");
+}
 
-    @Test
-    public void testUpgradeWithNotEnoughStones() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
-        assertThrows(IllegalArgumentException.class, () -> {
-            weapon.upgrade(0, 100.0);
-        });
-    }
+@Test
+public void testUpgradeJustBelowMaxDamage() {
+    int initialDamage = MAX_DAMAGE - 5;
+    Weapon weapon = new Weapon("High Damage Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 20, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 200.0);
+    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should not exceed max limit after upgrade");
+}
 
-    @Test
-    public void testUpgradeWithNotEnoughMoney() {
-        Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
-                DEFAULT_ATTACK_SPEED, DEFAULT_TYPE, DEFAULT_COST);
-        assertThrows(IllegalArgumentException.class, () -> {
-            weapon.upgrade(10, 5.0);
-        });
-    }
+@Test
+public void testUpgradeJustBelowMaxAttackSpeed() {
+    double initialAttackSpeed = MAX_ATTACK_SPEED - 0.1;
+    Weapon weapon = new Weapon("High Speed Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            initialAttackSpeed, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 20, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 200.0);
+    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(),
+            "Attack speed should not exceed max limit after upgrade");
+}
+
+@Test
+public void testUpgradeWhenAttackSpeedMaxButNotDamage() {
+    int initialDamage = DEFAULT_DAMAGE;
+    double initialAttackSpeed = MAX_ATTACK_SPEED;
+    Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+            initialAttackSpeed, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(initialDamage + 5, weapon.getDamage(), "Damage should increase by 5");
+    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
+}
+
+@Test
+public void testUpgradeWhenDamageMaxButNotAttackSpeed() {
+    int initialDamage = MAX_DAMAGE;
+    double initialAttackSpeed = DEFAULT_ATTACK_SPEED;
+    Weapon weapon = new Weapon("Mixed Max Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, initialDamage,
+            initialAttackSpeed, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
+    assertEquals(initialAttackSpeed + 0.5, weapon.getAttackSpeed(), "Attack speed should increase by 0.5");
+}
+
+@Test
+public void testUpgradeNotPossibleWhenMaxed() {
+    Weapon weapon = new Weapon("Maxed Out Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, MAX_DAMAGE, MAX_ATTACK_SPEED,
+    PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(MAX_DAMAGE, weapon.getDamage(), "Damage should remain at max limit");
+    assertEquals(MAX_ATTACK_SPEED, weapon.getAttackSpeed(), "Attack speed should remain at max limit");
+}
+
+@Test
+public void testUpgradeDoesNotChangeRarityWhenDPSRemainsInSameRange() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 20, 1.0, PHYSICAL_TYPE,
+            DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(25, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+    assertEquals(1.5, weapon.getAttackSpeed(), "Attack speed should increase by 0.5 after upgrade");
+    assertEquals(Equipment.Rarity.RARE, weapon.getRarity(), "Rarity should remain RARE based on new DPS");
+}
+
+@Test
+public void testUpgradeIncreasesBothDamageAndAttackSpeedAndUpdatesRarity() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, 10, 1.0, PHYSICAL_TYPE,
+            DEFAULT_COST);
+    assertEquals(Equipment.Rarity.COMMON, weapon.getRarity());
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 600.0);
+    assertEquals(15, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+    assertEquals(1.5, weapon.getAttackSpeed(), "Attack speed should increase by 0.5 after upgrade");
+    assertEquals(Equipment.Rarity.UNCOMMON, weapon.getRarity());
+}
+
+@Test
+public void testSuccessfulUpgrade() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    weapon.upgrade(upgradeItems, 100.0);
+    assertEquals(DEFAULT_DAMAGE + 5, weapon.getDamage(), "Damage should increase by 5 after upgrade");
+    assertEquals(DEFAULT_ATTACK_SPEED + 0.5, weapon.getAttackSpeed(),
+            "Attack speed should increase by 0.5 after upgrade");
+}
+
+@Test
+public void testUpgradeWithNegativeMoney() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    assertThrows(IllegalArgumentException.class, () -> {
+        weapon.upgrade(upgradeItems, -100.0);
+    });
+}
+
+@Test
+public void testUpgradeWithNotEnoughStones() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 0, ItemType.SMITHING_STONE));
+    assertThrows(IllegalArgumentException.class, () -> {
+        weapon.upgrade(upgradeItems, 100.0);
+    });
+}
+
+@Test
+public void testUpgradeWithNotEnoughMoney() {
+    Weapon weapon = new Weapon("Upgradeable Sword", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE,
+            DEFAULT_ATTACK_SPEED, PHYSICAL_TYPE, DEFAULT_COST);
+    List<Item> upgradeItems = new ArrayList<>();
+    upgradeItems.add(new Item("Smithing Stone", 10, ItemType.SMITHING_STONE));
+    assertThrows(IllegalArgumentException.class, () -> {
+        weapon.upgrade(upgradeItems, 5.0);
+    });
+}
 }

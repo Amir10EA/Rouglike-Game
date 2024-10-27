@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.List;
+
 public class Armor extends Equipment {
     private static final int MAX_DEFENSE = 100;
 
@@ -45,26 +47,30 @@ public class Armor extends Equipment {
         }
     }
 
-    public void upgrade(int armorStones, double money) {
-        if (armorStones < 0 || money < 0) {
-            throw new IllegalArgumentException("Stones and money must be non-negative");
+    public void upgrade(List<Item> upgradeItems, double money) {
+        if (upgradeItems == null || upgradeItems.isEmpty() || money < 0) {
+            throw new IllegalArgumentException("Invalid upgrade items or money.");
+        }
+
+        int totalStones = 0;
+
+        for (Item item : upgradeItems) {
+            if (item.getItemType() == ItemType.ARMOR_STONE) {
+                totalStones += item.getQuantity();
+            }
         }
 
         int maxPossibleIncrease = (int) (money / 10); 
-        int actualIncrease = Math.min(armorStones, maxPossibleIncrease); 
+        int actualIncrease = Math.min(totalStones, maxPossibleIncrease);
 
         if (actualIncrease <= 0) {
-        throw new IllegalArgumentException("Not enough for an upgrade");
+            throw new IllegalArgumentException("Not enough items or money for upgrade");
         }
         int additionalPhysicalDefense = actualIncrease / 2; 
-        int additionalMagicalDefense = actualIncrease / 2; 
+        int additionalMagicalDefense = actualIncrease / 2;
 
-        if (armorStones >= actualIncrease && money >= actualIncrease * 10) {
-            physicalDefense = Math.min(MAX_DEFENSE, physicalDefense + additionalPhysicalDefense);
-            magicalDefense = Math.min(MAX_DEFENSE, magicalDefense + additionalMagicalDefense);
-        } else {
-            throw new IllegalArgumentException("Not enough stones or money for upgrade");
-        }
+        physicalDefense = Math.min(MAX_DEFENSE, physicalDefense + additionalPhysicalDefense);
+        magicalDefense = Math.min(MAX_DEFENSE, magicalDefense + additionalMagicalDefense);
 
         setRarity(determineRarity());
     }

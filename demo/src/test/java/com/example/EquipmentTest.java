@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import com.example.Equipment.Rarity;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
 
 public class EquipmentTest {
     private static final double DEFAULT_WEIGHT = 5.0;
@@ -18,7 +17,10 @@ public class EquipmentTest {
     private static final int NEGATIVE_VALUE = -1;
     private static final int MAXIMUM_DURABILITY = Integer.MAX_VALUE;
 
-    private static final Cost DEFAULT_COST = new Cost(100.0, Map.of("Iron Ingot", 3, "Wood", 1));
+    private static final Cost DEFAULT_COST = new Cost(100.0, List.of(
+        new Item("Iron Ingot", 3, ItemType.SMITHING_STONE),
+        new Item("Wood", 1, ItemType.SMITHING_STONE)
+    ));
 
     @Test
     public void testValidEquipmentCreation() {

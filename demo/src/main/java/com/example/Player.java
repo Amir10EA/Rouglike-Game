@@ -22,28 +22,39 @@ public class Player extends BaseCharacter {
         }
     }
 
-        public void addWeapon(Weapon weapon) {
-        equipmentManager.addWeapon(weapon);
+    public EquipmentManager getEquipmentManager() {
+        return equipmentManager;
     }
 
-    public void removeWeapon(Weapon weapon) {
-        equipmentManager.removeWeapon(weapon);
+    public void addItem(InventoryItem item) {
+        equipmentManager.addItem(item);
     }
 
-    public List<Weapon> getWeapons() {
-        return equipmentManager.getWeapons();
+    public void removeItem(InventoryItem item) {
+        equipmentManager.removeItem(item);
     }
 
     public void equipWeapon(Weapon weapon) {
         equipmentManager.equipWeapon(weapon);
     }
 
-    public void switchWeapon(Weapon weapon) {
-        equipmentManager.switchWeapon(weapon);
+    public void unequipWeapon() {
+        equipmentManager.unequipWeapon();
     }
 
     public Weapon getActiveWeapon() {
         return equipmentManager.getActiveWeapon();
     }
 
+    public void equipArmor(Armor armor) {
+        equipmentManager.equipArmor(armor);
+    }
+
+    public void unequipArmor(Armor armor) {
+        equipmentManager.unequipArmor(armor);
+    }
+
+    public List<Armor> getEquippedArmor() {
+        return equipmentManager.getEquippedArmor();
+    }
 }

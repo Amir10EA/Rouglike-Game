@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.List;
+
 public class Weapon extends Equipment {
     private static final int MAX_DAMAGE = 200;
     private static final double MAX_ATTACK_SPEED = 3.0;
@@ -54,30 +56,33 @@ public class Weapon extends Equipment {
         }
     }
 
-    public void upgrade(int stones, double money) {
-        if (stones < 0 || money < 0) {
-            throw new IllegalArgumentException("Stones and money must be non-negative");
+    public void upgrade(List<Item> upgradeItems, double money) {
+        if (upgradeItems == null || upgradeItems.isEmpty() || money < 0) {
+            throw new IllegalArgumentException("Invalid upgrade items or money.");
         }
-    
+
+        int totalStones = 0;
+        ItemType requiredItemType = type.getDamageType().equals("Physical") ? ItemType.SMITHING_STONE : ItemType.MAGICAL_STONE;
+
+        for (Item item : upgradeItems) {
+            if (item.getItemType() == requiredItemType) {
+                totalStones += item.getQuantity();
+            }
+        }
+
         int maxPossibleIncrease = (int) (money / 10); 
-        int actualIncrease = Math.min(stones, maxPossibleIncrease);
-    
+        int actualIncrease = Math.min(totalStones, maxPossibleIncrease);
+
         if (actualIncrease <= 0) {
-            throw new IllegalArgumentException("Not enough stones or money for upgrade");
+            throw new IllegalArgumentException("Not enough items or money for upgrade");
         }
-    
+
         int additionalDamage = actualIncrease / 2; 
         double additionalAttackSpeed = actualIncrease / 20.0;
-    
-        // Ensure weapon type is valid for upgrade
-        if (!type.getDamageType().equals("Physical") && !type.getDamageType().equals("Magical")) {
-            throw new IllegalArgumentException("Invalid weapon type for upgrade");
-        }
-    
-        // Perform the upgrade
+
         damage = Math.min(MAX_DAMAGE, damage + additionalDamage);
         attackSpeed = Math.min(MAX_ATTACK_SPEED, attackSpeed + additionalAttackSpeed);
-    
+
         setRarity(determineRarity());
     }
 

@@ -3,18 +3,17 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
 
 public class CostTest {
 
     private static final double DEFAULT_MONEY = 100.0;
     private static final double NEGATIVE_MONEY = -100.0;
-    private Map<String, Integer> defaultMaterials;
+    private List<Item> defaultMaterials;
     private Cost defaultCost;
 
     private Cost createDefaultCost() {
-        defaultMaterials = new HashMap<>(Map.of("Iron Ingot", 5));
+        defaultMaterials = List.of(new Item("Iron Ingot", 5, ItemType.SMITHING_STONE));
         return new Cost(DEFAULT_MONEY, defaultMaterials);
     }
 
@@ -31,14 +30,14 @@ public class CostTest {
 
     @Test
     public void testAddMaterial() {
-        defaultCost.addMaterial("Wood", 3);
-        assertEquals(3, defaultCost.getMaterials().get("Wood"));
+        defaultCost.addMaterial(new Item("Wood", 3, ItemType.SMITHING_STONE));
+        assertEquals(3, defaultCost.getMaterials().stream().filter(item -> item.getName().equals("Wood")).findFirst().get().getQuantity());
     }
 
     @Test
     public void testRemoveMaterial() {
-        defaultCost.removeMaterial("Iron Ingot", 3);
-        assertEquals(2, defaultCost.getMaterials().get("Iron Ingot"));
+        defaultCost.removeMaterial(new Item("Iron Ingot", 3, ItemType.SMITHING_STONE));
+        assertEquals(2, defaultCost.getMaterials().stream().filter(item -> item.getName().equals("Iron Ingot")).findFirst().get().getQuantity());
     }
 
     @Test
@@ -49,7 +48,7 @@ public class CostTest {
 
     @Test
     public void testMoneyCannotBeNegative() {
-        Map<String, Integer> materials = Map.of("Iron Ingot", 5, "Wood", 2);
+        List<Item> materials = List.of(new Item("Iron Ingot", 5, ItemType.SMITHING_STONE), new Item("Wood", 2, ItemType.SMITHING_STONE));
 
         assertThrows(IllegalArgumentException.class, () -> {
             new Cost(NEGATIVE_MONEY, materials);
@@ -66,44 +65,43 @@ public class CostTest {
     @Test
     public void testMaterialsCannotBeEmpty() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Cost(DEFAULT_MONEY, new HashMap<>());
+            new Cost(DEFAULT_MONEY, List.of());
         });
     }
 
     @Test
     public void testAddMaterialQuantityCannotBeZeroOrLess() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.addMaterial("Wood", 0);
+            defaultCost.addMaterial(new Item("Wood", 0, ItemType.SMITHING_STONE));
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.addMaterial("Wood", -1);
+            defaultCost.addMaterial(new Item("Wood", -1, ItemType.SMITHING_STONE));
         });
     }
 
     @Test
     public void testRemoveMaterialQuantityCannotBeZeroOrNegative() {
-
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.removeMaterial("Iron Ingot", 0);
+            defaultCost.removeMaterial(new Item("Iron Ingot", 0, ItemType.SMITHING_STONE));
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.removeMaterial("Iron Ingot", -1);
+            defaultCost.removeMaterial(new Item("Iron Ingot", -1, ItemType.SMITHING_STONE));
         });
     }
 
     @Test
     public void testRemoveMaterialKeyDoesNotExist() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.removeMaterial("Wood", 1);
+            defaultCost.removeMaterial(new Item("Wood", 1, ItemType.SMITHING_STONE));
         });
     }
 
     @Test
     public void testRemoveMaterialQuantityExceedsAvailable() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultCost.removeMaterial("Iron Ingot", 10);
+            defaultCost.removeMaterial(new Item("Iron Ingot", 10, ItemType.SMITHING_STONE));
         });
     }
 
