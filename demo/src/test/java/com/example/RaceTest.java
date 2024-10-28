@@ -36,4 +36,9 @@ public class RaceTest {
             () -> assertEquals(1, goblin.getIntelligence())
         );
     }
+
+    @Test
+    public void testRaceEnumSize(){
+        assertEquals(3, Race.values().length, "Race enum should have 3 constans.");
+    }
 }
