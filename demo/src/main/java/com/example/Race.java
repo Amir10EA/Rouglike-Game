@@ -27,4 +27,9 @@ public enum Race {
         return intelligence;
     }
     
+    @Override
+    public String toString() {
+        return String.format("%s(strength=%d, speed=%d, intelligence=%d)", 
+                             name(), strength, speed, intelligence);
+    }
 }
