@@ -160,6 +160,14 @@ public class PickpocketTest {
         );
     }
 
+    @Test
+    public void testToString() {
+        Pickpocket pickpocket = new Pickpocket("Pickpocket", 100, 1, Race.GOBLIN);
+
+        String expected = "Pickpocket{name='Pickpocket', health=100, level=1, race=GOBLIN(strength=3, speed=1, intelligence=1), pickpocketingSkill=5, lockpickingSkill=3, sneakingSkill=4}";
+        assertEquals(expected, pickpocket.toString(), "toString should return correct string representation of Pickpocket");
+    }
+
 
 }
 
