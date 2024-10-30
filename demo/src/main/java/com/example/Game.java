@@ -74,10 +74,7 @@ public class Game {
 
     void transitionToNewMap(DoorTile doorTile) {
         System.out.println("Found a door leading to: " + doorTile.getEnvironmentType() + " environment.");
-        player.clearEnvironmentEffect();
-        
         map = initializeMap(doorTile.getNextMapWidth(), doorTile.getNextMapHeight(), doorTile.getEnvironmentType());
-        player.applyEnvironmentEffect(map.getEnvironmentType());
     }
 
     public int[] getPlayerPosition() {
