@@ -8,10 +8,10 @@ public class GameTest {
 
     private static final int INITIAL_MAP_WIDTH = 10;
     private static final int INITIAL_MAP_HEIGHT = 10;
-    private static final String INITIAL_ENVIRONMENT = "normal";
+    private static final EnvironmentType INITIAL_ENVIRONMENT = EnvironmentType.NORMAL;
     private static final int NEW_MAP_WIDTH = 12;
     private static final int NEW_MAP_HEIGHT = 12;
-    private static final String NEW_ENVIRONMENT = "stormy";
+    private static final EnvironmentType NEW_ENVIRONMENT = EnvironmentType.STORMY;
     private static final int PLAYER_INITIAL_HEALTH = 100;
     private static final int HEALTH_LOST = 10;
     private static final int PLAYER_INITIAL_STRENGTH = 10;
@@ -118,7 +118,7 @@ public class GameTest {
 
     @Test
     public void testApplyLavaEnvironmentEffect() {
-        player.applyEnvironmentEffect("lava");
+        player.applyEnvironmentEffect(EnvironmentType.LAVA);
         assertEquals(PLAYER_INITIAL_HEALTH - LAVA_DAMAGE, player.getHealth(),
                 "Player should take 5 damage in lava environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
@@ -127,7 +127,7 @@ public class GameTest {
 
     @Test
     public void testApplyStormyEnvironmentEffect() {
-        player.applyEnvironmentEffect("stormy");
+        player.applyEnvironmentEffect(EnvironmentType.STORMY);
         assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
                 "Player health should remain unchanged in stormy environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),
@@ -136,7 +136,7 @@ public class GameTest {
 
     @Test
     public void testApplyIcyEnvironmentEffect() {
-        player.applyEnvironmentEffect("icy");
+        player.applyEnvironmentEffect(EnvironmentType.ICY);
         assertEquals(PLAYER_INITIAL_HEALTH - ICY_DAMAGE, player.getHealth(),
                 "Player should take 2 damage in icy environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
@@ -147,7 +147,7 @@ public class GameTest {
     public void testApplyForestEnvironmentEffect() {
 
         player.setHealth(PLAYER_INITIAL_HEALTH - HEALTH_LOST);
-        player.applyEnvironmentEffect("forest");
+        player.applyEnvironmentEffect(EnvironmentType.FOREST);
 
         int expectedHealthAfterHeal = PLAYER_INITIAL_HEALTH - HEALTH_LOST + FOREST_HEAL;
         assertEquals(expectedHealthAfterHeal, player.getHealth(),
@@ -158,7 +158,7 @@ public class GameTest {
 
     @Test
     public void testApplySandyEnvironmentEffect() {
-        player.applyEnvironmentEffect("sandy");
+        player.applyEnvironmentEffect(EnvironmentType.SANDY);
         assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
                 "Player health should remain unchanged in sandy environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH + SANDY_STRENGTH_REDUCTION, player.getStrength(),
@@ -167,7 +167,7 @@ public class GameTest {
 
     @Test
     public void testApplyNormalEnvironmentEffect() {
-        player.applyEnvironmentEffect("normal");
+        player.applyEnvironmentEffect(EnvironmentType.NORMAL);
         assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
                 "Player health should remain unchanged in normal environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
@@ -176,7 +176,7 @@ public class GameTest {
 
     @Test
     public void testClearEnvironmentEffect() {
-        player.applyEnvironmentEffect("stormy");
+        player.applyEnvironmentEffect(NEW_ENVIRONMENT);
         assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),
                 "Player strength should increase in stormy environment.");
 
