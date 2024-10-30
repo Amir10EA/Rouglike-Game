@@ -13,6 +13,7 @@ public class GameTest {
     private static final int NEW_MAP_HEIGHT = 12;
     private static final String NEW_ENVIRONMENT = "stormy";
     private static final int PLAYER_INITIAL_HEALTH = 100;
+    private static final int HEALTH_LOST = 10;
     private static final int PLAYER_INITIAL_STRENGTH = 10;
     private static final int LAVA_DAMAGE = 5;
     private static final int STORMY_STRENGTH_BOOST = 2;
@@ -144,8 +145,12 @@ public class GameTest {
 
     @Test
     public void testApplyForestEnvironmentEffect() {
+
+        player.setHealth(PLAYER_INITIAL_HEALTH - HEALTH_LOST);
         player.applyEnvironmentEffect("forest");
-        assertEquals(PLAYER_INITIAL_HEALTH + FOREST_HEAL, player.getHealth(),
+
+        int expectedHealthAfterHeal = PLAYER_INITIAL_HEALTH - HEALTH_LOST + FOREST_HEAL;
+        assertEquals(expectedHealthAfterHeal, player.getHealth(),
                 "Player should heal by 3 in forest environment.");
         assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
                 "Player strength should remain unchanged in forest environment.");
