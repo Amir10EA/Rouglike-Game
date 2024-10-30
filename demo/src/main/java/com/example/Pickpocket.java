@@ -55,4 +55,10 @@ public class Pickpocket extends BaseCharacter{
         this.sneakingSkill = calculateSneakingSkill(level);
         this.pickpocketingSkill = calculatePickpocketingSkill(level);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Pickpocket{name='%s', health=%d, level=%d, race=%s, pickpocketingSkill=%d, lockpickingSkill=%d, sneakingSkill=%d}",
+                getName(), getHealth(), getLevel(), getRace(), pickpocketingSkill, lockPickingSkill, sneakingSkill);
+    }
 }
