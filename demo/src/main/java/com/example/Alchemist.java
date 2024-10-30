@@ -47,5 +47,11 @@ public class Alchemist extends BaseCharacter {
         this.potionCraftingSkill = calculatePotionCraftingSkill(level);
         this.bombThrowingSkill = calculateBombThrowingSkill(level);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Alchemist{name='%s', health=%d, level=%d, race=%s, alchemySkill=%d, potionCraftingSkill=%d, bombThrowingSkill=%d}",
+                getName(), getHealth(), getLevel(), getRace(), alchemySkill, potionCraftingSkill, bombThrowingSkill);
+    }
 }
 
