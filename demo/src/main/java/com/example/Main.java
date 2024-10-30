@@ -27,5 +27,8 @@ public class Main {
         System.out.println("Health: " + player.getHealth());
         System.out.println("Strength: " + player.getStrength());
         System.out.println("Equipped Weapon: " + player.getActiveWeapon().getName());
+
+        Game game = new Game(player);
+        game.exploreMap();
     }
 }
