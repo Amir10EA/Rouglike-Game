@@ -16,6 +16,9 @@ public class GameTest {
     private static final int PLAYER_INITIAL_STRENGTH = 10;
     private static final int LAVA_DAMAGE = 5;
     private static final int STORMY_STRENGTH_BOOST = 2;
+    private static final int ICY_DAMAGE = 2;
+    private static final int FOREST_HEAL = 3;
+    private static final int SANDY_STRENGTH_REDUCTION = -1;
 
     private Game game;
     private Player player;
@@ -45,13 +48,6 @@ public class GameTest {
                 "Initial environment type should be normal.");
         assertEquals(INITIAL_MAP_WIDTH, initialMap.getWidth(), "Initial map width should be correct.");
         assertEquals(INITIAL_MAP_HEIGHT, initialMap.getHeight(), "Initial map height should be correct.");
-    }
-
-    @Test
-    public void testApplyEnvironmentEffect() {
-        player.applyEnvironmentEffect("lava");
-        assertEquals(PLAYER_INITIAL_HEALTH - LAVA_DAMAGE, player.getHealth(),
-                "Player should take damage from lava environment.");
     }
 
     @Test
@@ -101,9 +97,6 @@ public class GameTest {
         assertEquals(NEW_ENVIRONMENT, newMap.getEnvironmentType(), "New map environment should be stormy.");
         assertEquals(NEW_MAP_WIDTH, newMap.getWidth(), "New map width should match DoorTile property.");
         assertEquals(NEW_MAP_HEIGHT, newMap.getHeight(), "New map height should match DoorTile property.");
-
-        assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),
-                "Player strength should increase in a stormy environment.");
     }
 
     @Test
@@ -120,5 +113,70 @@ public class GameTest {
         int[] result = game.handleMovement("Q", 5, 5, INITIAL_MAP_WIDTH, INITIAL_MAP_HEIGHT);
 
         assertNull(result, "Input 'Q' should signal game quit by returning null.");
+    }
+
+    @Test
+    public void testApplyLavaEnvironmentEffect() {
+        player.applyEnvironmentEffect("lava");
+        assertEquals(PLAYER_INITIAL_HEALTH - LAVA_DAMAGE, player.getHealth(),
+                "Player should take 5 damage in lava environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
+                "Player strength should remain unchanged in lava environment.");
+    }
+
+    @Test
+    public void testApplyStormyEnvironmentEffect() {
+        player.applyEnvironmentEffect("stormy");
+        assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
+                "Player health should remain unchanged in stormy environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),
+                "Player strength should increase by 2 in stormy environment.");
+    }
+
+    @Test
+    public void testApplyIcyEnvironmentEffect() {
+        player.applyEnvironmentEffect("icy");
+        assertEquals(PLAYER_INITIAL_HEALTH - ICY_DAMAGE, player.getHealth(),
+                "Player should take 2 damage in icy environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
+                "Player strength should remain unchanged in icy environment.");
+    }
+
+    @Test
+    public void testApplyForestEnvironmentEffect() {
+        player.applyEnvironmentEffect("forest");
+        assertEquals(PLAYER_INITIAL_HEALTH + FOREST_HEAL, player.getHealth(),
+                "Player should heal by 3 in forest environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
+                "Player strength should remain unchanged in forest environment.");
+    }
+
+    @Test
+    public void testApplySandyEnvironmentEffect() {
+        player.applyEnvironmentEffect("sandy");
+        assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
+                "Player health should remain unchanged in sandy environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH + SANDY_STRENGTH_REDUCTION, player.getStrength(),
+                "Player strength should decrease by 1 in sandy environment.");
+    }
+
+    @Test
+    public void testApplyNormalEnvironmentEffect() {
+        player.applyEnvironmentEffect("normal");
+        assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(),
+                "Player health should remain unchanged in normal environment.");
+        assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
+                "Player strength should remain unchanged in normal environment.");
+    }
+
+    @Test
+    public void testClearEnvironmentEffect() {
+        player.applyEnvironmentEffect("stormy");
+        assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),
+                "Player strength should increase in stormy environment.");
+
+        player.clearEnvironmentEffect();
+        assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
+                "Player strength should reset after clearing environment effect.");
     }
 }
