@@ -24,3 +24,7 @@ jobs:
       run: mvn -B package --file demo/pom.xml
     - name: Run tests
       run: mvn test --file demo/pom.xml
+    - name: Code Coverage
+      run: mvn jacoco:report --file demo/pom.xml
+    - name: Static Code Analysis
+      run: mvn checkstyle:check --file demo/pom.xml
