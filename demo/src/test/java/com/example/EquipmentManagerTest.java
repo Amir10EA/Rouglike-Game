@@ -344,4 +344,19 @@ public class EquipmentManagerTest {
         assertEquals(1, equippedArmor.size(), "Equipped armor list should contain one item.");
         assertEquals(helmet, equippedArmor.get(0), "Equipped armor should contain the helmet.");
     }
+
+    @Test
+    public void testAddNullItem() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.addItem(null);
+        }, "Adding a null item should throw an IllegalArgumentException.");
+    }
+    
+    @Test
+    public void testRemoveNullItem() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            equipmentManager.removeItem(null);
+        }, "Removing a null item should throw an IllegalArgumentException.");
+    }
+    
 }
