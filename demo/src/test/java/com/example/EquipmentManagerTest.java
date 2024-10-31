@@ -6,15 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EquipmentManagerTest {
     private EquipmentManager equipmentManager;
     private Weapon sword;
     private Weapon axe;
-    private Weapon mace;
     private Armor helmet;
     private Armor chestplate;
     private Armor leggings;
@@ -40,7 +37,7 @@ public class EquipmentManagerTest {
             new Item("Iron", 5, ItemType.SMITHING_STONE)
         );
         Cost maceCost = new Cost(20.0, maceMaterials);
-        mace = new Weapon("Mace", 25, 90, 30, 1.0, WeaponType.MACE, maceCost);
+        new Weapon("Mace", 25, 90, 30, 1.0, WeaponType.MACE, maceCost);
 
         List<Item> helmetMaterials = List.of(
             new Item("Leather", 2, ItemType.ARMOR_STONE)

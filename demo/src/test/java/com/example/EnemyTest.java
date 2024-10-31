@@ -108,7 +108,7 @@ public class EnemyTest {
 
     @Test
     public void testAttackWhenDead() {
-        enemy.takeDamage(100); // Dödar fienden
+        enemy.takeDamage(100); 
         assertFalse(enemy.isAlive());
         int initialHealth = target.getHealth();
         enemy.attack(target);
@@ -118,12 +118,11 @@ public class EnemyTest {
     @Test
     public void testDefend() {
         enemy.defend();
-        // Eftersom defend() bara skriver ut en text, behöver vi inte göra några asserts här.
     }
 
     @Test
     public void testDecideAction_AboveThreshold() {
-        enemy.gainXp(60); // XP är nu 110
+        enemy.gainXp(60); 
         int initialHealth = target.getHealth();
         enemy.decideAction(target);
         assertTrue(target.getHealth() < initialHealth, "Fienden ska attackera när XP >= 100.");
@@ -131,9 +130,8 @@ public class EnemyTest {
 
     @Test
     public void testDecideAction_BelowThreshold() {
-        enemy.gainXp(-enemy.getXp()); // Sätter XP till 0
+        enemy.gainXp(-enemy.getXp()); 
         enemy.decideAction(target);
-        // Fienden ska försvara sig; ingen förändring i målets hälsa.
     }
 
     @Test
