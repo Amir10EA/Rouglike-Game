@@ -50,11 +50,6 @@ public class Map {
         }
     }
 
-    private String getRandomEnvironment() {
-        String[] environments = {"stormy", "sandy", "lava", "forest", "icy", "normal"};
-        return environments[new Random().nextInt(environments.length)];
-    }
-
     private int getRandomMapDimension() {
         return new Random().nextInt(11) + 5; //5-15
     }
