@@ -17,14 +17,14 @@ public class MapTest {
 
     @Test
     public void testMapInitialization() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         assertEquals(NORMAL_MAP_WIDTH, map.getWidth());
         assertEquals(NORMAL_MAP_HEIGHT, map.getHeight());
     }
 
     @Test
     public void testRandomMapGeneration() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         assertNotNull(map.getTile(0, 0));
         assertNotNull(map.getTile(NORMAL_MAP_WIDTH - 1, NORMAL_MAP_HEIGHT - 1));
     }
@@ -32,7 +32,7 @@ public class MapTest {
     //min map storlek: 3x3.
     @Test
     public void testMinimumSizeMap() {
-        Map map = new Map(MIN_MAP_SIZE, MIN_MAP_SIZE, "normal");
+        Map map = new Map(MIN_MAP_SIZE, MIN_MAP_SIZE, EnvironmentType.NORMAL);
         assertEquals(MIN_MAP_SIZE, map.getWidth());
         assertEquals(MIN_MAP_SIZE, map.getHeight());
     }
@@ -40,28 +40,28 @@ public class MapTest {
     @Test
     public void testTooSmallMapThrowsException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Map(TOO_SMALL_MAP_SIZE, TOO_SMALL_MAP_SIZE, "normal");
+            new Map(TOO_SMALL_MAP_SIZE, TOO_SMALL_MAP_SIZE, EnvironmentType.NORMAL);
         });
         assertEquals("Map size must be at least 3x3", exception.getMessage());
     }
 
     @Test
     public void testLargeMapCreation() {
-        Map largeMap = new Map(LARGE_MAP_SIZE, LARGE_MAP_SIZE, "normal");
+        Map largeMap = new Map(LARGE_MAP_SIZE, LARGE_MAP_SIZE, EnvironmentType.NORMAL);
         assertEquals(LARGE_MAP_SIZE, largeMap.getWidth());
         assertEquals(LARGE_MAP_SIZE, largeMap.getHeight());
     }
 
     @Test
     public void testNonSquareMap() {
-        Map map = new Map(NON_SQUARE_MAP_WIDTH, NON_SQUARE_MAP_HEIGHT, "normal");
+        Map map = new Map(NON_SQUARE_MAP_WIDTH, NON_SQUARE_MAP_HEIGHT, EnvironmentType.NORMAL);
         assertEquals(NON_SQUARE_MAP_WIDTH, map.getWidth());
         assertEquals(NON_SQUARE_MAP_HEIGHT, map.getHeight());
     }
 
     @Test
     public void testTileAttributes() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         Tile tile = map.getTile(0, 0);
         assertNotNull(tile);
         assertNotNull(tile.getTerrainType());
@@ -70,13 +70,13 @@ public class MapTest {
 
     @Test
     public void testOutOfBoundsTile() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         assertNull(map.getTile(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT));
     }
 
     @Test
     public void testTerrainGeneration() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         boolean foundWall = false;
         boolean foundFloor = false;
 
@@ -98,7 +98,7 @@ public class MapTest {
 
     @Test
     public void testWallsSurroundMap() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
 
         for (int x = 0; x < NORMAL_MAP_WIDTH; x++) {
             assertFalse(map.getTile(x, 0).isWalkable());
@@ -113,7 +113,7 @@ public class MapTest {
 
     @Test
     public void testDoorPlacement() { //ska alltid finnas 2-3 dörrar i ett rum
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
         int doorCount = 0;
 
         for (int x = 1; x < NORMAL_MAP_WIDTH - 1; x++) {
@@ -134,7 +134,7 @@ public class MapTest {
 
     @Test
     public void testMapTransitionFromDoor() {
-        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, "normal");
+        Map map = new Map(NORMAL_MAP_WIDTH, NORMAL_MAP_HEIGHT, EnvironmentType.NORMAL);
 
         //skapar en map från första hittade dörren
         for (int x = 1; x < NORMAL_MAP_WIDTH - 1; x++) {

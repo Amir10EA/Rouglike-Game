@@ -14,31 +14,31 @@ public class Player extends BaseCharacter {
         this.equipmentManager = new EquipmentManager();
     }
 
-    public void applyEnvironmentEffect(String environmentType) {
+    public void applyEnvironmentEffect(EnvironmentType environmentType) {
         clearEnvironmentEffect(); //Reset any previous effects
 
-        switch (environmentType.toLowerCase()) {
-            case "lava":
+        switch (environmentType) {
+            case LAVA:
                 System.out.println("Lava environment: Player takes 5 damage!");
                 takeDamage(5);
                 break;
-            case "stormy":
+            case STORMY:
                 System.out.println("Stormy environment: Player strength temporarily increased!");
                 environmentalStrengthModifier = 2; 
                 break;
-            case "icy":
+            case ICY:
                 System.out.println("Icy environment: Player takes slight damage!");
                 takeDamage(2);
                 break;
-            case "forest":
+            case FOREST:
                 System.out.println("Forest environment: Player heals slightly!");
                 heal(3);
                 break;
-            case "sandy":
+            case SANDY:
                 System.out.println("Sandy environment: Player strength temporarily decreased!");
                 environmentalStrengthModifier = -1; 
                 break;
-            case "normal":
+            case NORMAL:
                 System.out.println("Normal environment: No special effects.");
                 break;
             default:

@@ -10,11 +10,11 @@ public class Game {
 
     public Game(Player player) {
         this.player = player;
-        this.map = initializeMap(10, 10, "normal"); 
+        this.map = initializeMap(10, 10, EnvironmentType.NORMAL); 
         centerPlayerOnMap();
     }
 
-    private Map initializeMap(int width, int height, String environmentType) {
+    private Map initializeMap(int width, int height, EnvironmentType environmentType) {
         Map map = new Map(width, height, environmentType);
         System.out.println("Entered a new map with environment: " + environmentType);
         player.applyEnvironmentEffect(environmentType);
@@ -74,10 +74,7 @@ public class Game {
 
     void transitionToNewMap(DoorTile doorTile) {
         System.out.println("Found a door leading to: " + doorTile.getEnvironmentType() + " environment.");
-        player.clearEnvironmentEffect();
-        
         map = initializeMap(doorTile.getNextMapWidth(), doorTile.getNextMapHeight(), doorTile.getEnvironmentType());
-        player.applyEnvironmentEffect(map.getEnvironmentType());
     }
 
     public int[] getPlayerPosition() {

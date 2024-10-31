@@ -7,7 +7,7 @@ public class TileTest {
 
     private static final String TERRAIN_FLOOR = "floor";
     private static final String TERRAIN_WALL = "wall";
-    private static final String ENVIRONMENT_LAVA = "lava";
+    private static final EnvironmentType NEW_ENVIRONMENT = EnvironmentType.LAVA;
 
     @Test
     public void testTileInitialization() {
@@ -39,10 +39,10 @@ public class TileTest {
 
     @Test
     public void testDoorTileInitialization() {
-        DoorTile doorTile = new DoorTile(ENVIRONMENT_LAVA, 7, 8);
+        DoorTile doorTile = new DoorTile(NEW_ENVIRONMENT, 7, 8);
         assertTrue(doorTile.isWalkable());
         assertEquals("door", doorTile.getTerrainType());
-        assertEquals(ENVIRONMENT_LAVA, doorTile.getEnvironmentType());
+        assertEquals(NEW_ENVIRONMENT, doorTile.getEnvironmentType());
         assertEquals(7, doorTile.getNextMapWidth());
         assertEquals(8, doorTile.getNextMapHeight());
     }

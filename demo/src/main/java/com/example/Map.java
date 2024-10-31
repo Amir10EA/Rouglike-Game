@@ -6,10 +6,10 @@ public class Map {
     private int width;
     private int height;
     private Tile[][] tiles;
-    private String environmentType;
+    private EnvironmentType environmentType;
     private static final int MIN_SIZE = 3;
 
-    public Map(int width, int height, String environmentType) {
+    public Map(int width, int height, EnvironmentType environmentType) {
         if (width < MIN_SIZE || height < MIN_SIZE) {
             throw new IllegalArgumentException("Map size must be at least " + MIN_SIZE + "x" + MIN_SIZE);
         }
@@ -42,7 +42,7 @@ public class Map {
             int doorY = random.nextInt(height - 2) + 1; 
 
             if (tiles[doorX][doorY].getTerrainType().equals("floor")) {
-                String newEnvironment = getRandomEnvironment();
+                EnvironmentType newEnvironment = EnvironmentType.getRandomEnvironment();
                 int nextMapWidth = getRandomMapDimension();
                 int nextMapHeight = getRandomMapDimension();
                 tiles[doorX][doorY] = new DoorTile(newEnvironment, nextMapWidth, nextMapHeight);
@@ -51,7 +51,7 @@ public class Map {
     }
 
     private String getRandomEnvironment() {
-        String[] environments = {"stormy", "sandy", "lava", "forest", "icy"};
+        String[] environments = {"stormy", "sandy", "lava", "forest", "icy", "normal"};
         return environments[new Random().nextInt(environments.length)];
     }
 
@@ -66,7 +66,7 @@ public class Map {
         return null; 
     }
 
-    public String getEnvironmentType() {
+    public EnvironmentType getEnvironmentType() {
         return environmentType;
     }
 
