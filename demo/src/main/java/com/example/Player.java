@@ -5,8 +5,8 @@ import java.util.List;
 public class Player extends BaseCharacter {
     private int experience;
     private EquipmentManager equipmentManager;
-
     private int environmentalStrengthModifier = 0;
+    private Quest currentQuest;
 
     public Player(String name, int health, int strength, int level, Race race) {
         super(name, health, strength, level, race);
@@ -100,5 +100,35 @@ public class Player extends BaseCharacter {
 
     public List<Armor> getEquippedArmor() {
         return equipmentManager.getEquippedArmor();
+    }
+
+    public Quest getCurrentQuest() {
+        return currentQuest;
+    }
+
+    public void setCurrentQuest(Quest currentQuest) {
+        this.currentQuest = currentQuest;
+    }
+
+    public void cancelCurrentQuest() {
+        this.currentQuest = null;
+    }
+
+    @Override
+    public int calculateDamage() {
+        int baseDamage = super.getStrength();
+        if (getActiveWeapon() != null) {
+            baseDamage += getActiveWeapon().calculateDamage();
+        }
+        return baseDamage;
+    }
+
+    @Override
+    public void takeDamage(int amount) {
+        int reducedDamage = amount;
+        for (Armor armor : getEquippedArmor()) {
+            reducedDamage = armor.calculateDamageTaken(reducedDamage, 0); // Assuming physical damage for simplicity
+        }
+        setHealth(getHealth() - reducedDamage);
     }
 }

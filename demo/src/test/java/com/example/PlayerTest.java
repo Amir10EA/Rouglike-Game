@@ -223,4 +223,51 @@ public class PlayerTest {
         assertEquals(1, equippedArmor.size(), "Equipped armor list should contain one item.");
         assertEquals(helmet, equippedArmor.get(0), "Equipped armor should contain the helmet.");
     }
+    @Test
+    public void testGetCurrentQuest() {
+        Quest quest = new Quest("Defeat 3 enemies", 3);
+        player.setCurrentQuest(quest);
+        assertEquals(quest, player.getCurrentQuest());
+    }
+
+    @Test
+    public void testSetCurrentQuest() {
+        Quest quest = new Quest("Defeat 3 enemies", 3);
+        player.setCurrentQuest(quest);
+        assertEquals(quest, player.getCurrentQuest());
+    }
+
+    @Test
+    public void testCancelCurrentQuest() {
+        Quest quest = new Quest("Defeat 3 enemies", 3);
+        player.setCurrentQuest(quest);
+        player.cancelCurrentQuest();
+        assertNull(player.getCurrentQuest());
+    }
+
+    @Test
+    public void testCalculateDamageWithoutWeapon() {
+        assertEquals(10, player.calculateDamage());
+    }
+
+    @Test
+    public void testCalculateDamageWithWeapon() {
+        player.addItem(sword);
+        player.equipWeapon(sword);
+        assertEquals(40, player.calculateDamage()); 
+    }
+
+    @Test
+    public void testTakeDamageWithoutArmor() {
+        player.takeDamage(20);
+        assertEquals(80, player.getHealth());
+    }
+
+    @Test
+    public void testTakeDamageWithArmor() {
+        player.addItem(chestplate);
+        player.equipArmor(chestplate);
+        player.takeDamage(50);
+        assertEquals(62, player.getHealth()); 
+    }
 }
