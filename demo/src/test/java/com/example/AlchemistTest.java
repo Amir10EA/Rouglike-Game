@@ -108,6 +108,30 @@ public class AlchemistTest {
     }
 
     @Test
+    public void testThrowBombSuccess() {
+        Alchemist alchemist = new Alchemist("Alchemist", 100, 10, 2, Race.HUMAN);
+        int enemyDefense = 5;
+        
+        assertTrue(alchemist.throwBomb(enemyDefense), "The method should return true.");
+    }
+
+    @Test
+    public void testThrowBombFailure() {
+        Alchemist alchemist = new Alchemist("Alchemist", 100, 10, 1, Race.HUMAN); 
+        int enemyDefense = 10;
+
+        assertFalse(alchemist.throwBomb(enemyDefense), "The method should return false.");
+    }
+
+    @Test
+    public void testThrowBombEqual() {
+        Alchemist alchemist = new Alchemist("Alchemist", 100, 10, 5, Race.HUMAN); 
+        int enemyDefense = alchemist.getBombThrowingSkill();
+
+        assertTrue(alchemist.throwBomb(enemyDefense), "The method should return true.");
+    }
+
+    @Test
     public void testToString() {
         Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 10, 1, Race.ELF);
 
