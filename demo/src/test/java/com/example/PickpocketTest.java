@@ -86,7 +86,7 @@ public class PickpocketTest {
     }
 
     @Test
-    public void testPickPocketing() {
+    public void testPickPocketingSuccess() {
         Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
         Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
         Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10,1, Race.GOBLIN);
@@ -100,6 +100,24 @@ public class PickpocketTest {
                 "Elf pickpocket should be able to pickpocket an NPC with awareness " + npcAwareness),
             () -> assertTrue(goblinPickpocket.pickPocket(npcAwareness), 
                 "Goblin pickpocket should be able to pickpocket an NPC with awareness " + npcAwareness)
+        );
+    }
+
+    @Test
+    public void testPickPocketingFails() {
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
+        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10,1, Race.GOBLIN);
+
+        int npcAwareness = 10;
+
+        assertAll("Check if each race's pickpocket fails when NPC awareness is 10 " + npcAwareness,
+            () -> assertFalse(humanPickpocket.pickPocket(npcAwareness), 
+                "Human pickpocket should not be able to pickpocket an NPC with awareness " + npcAwareness),
+            () -> assertFalse(elfPickpocket.pickPocket(npcAwareness), 
+                "Elf pickpocket should not be able to pickpocket an NPC with awareness " + npcAwareness),
+            () -> assertFalse(goblinPickpocket.pickPocket(npcAwareness), 
+                "Goblin pickpocket should not be able to pickpocket an NPC with awareness " + npcAwareness)
         );
     }
 
