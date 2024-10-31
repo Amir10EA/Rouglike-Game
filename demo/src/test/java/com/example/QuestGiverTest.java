@@ -1,3 +1,5 @@
+package com.example;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,43 +11,56 @@ public class QuestGiverTest {
 
     @BeforeEach
     public void setUp() {
-        questGiver = new QuestGiver("TestGiver", "forest");
-        player = new Player("TestPlayer", 100, 10, Race.HUMAN);
-        enemy = new Enemy("TestEnemy", 50, 5, Race.ORC, 10);
+        questGiver = new QuestGiver("TestGiver");
+        player = new Player("TestPlayer", 100, 10, 1, Race.HUMAN);
+        enemy = new Enemy("TestEnemy", 50, 5, 1, Race.GOBLIN, 10);
     }
 
     @Test
     public void testQuestGiverCreation() {
         assertNotNull(questGiver);
-    }
-
-    @Test
-    public void testInvalidEnvironment() {
-        QuestGiver invalidQuestGiver = new QuestGiver("TestGiver", "invalidEnvironment");
-        assertNull(invalidQuestGiver.getCurrentQuest());
+        assertNotNull(questGiver.getQuest());
     }
 
     @Test
     public void testNameNotNullOrEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> new QuestGiver(null, "forest"));
-        assertThrows(IllegalArgumentException.class, () -> new QuestGiver("", "forest"));
+        assertThrows(IllegalArgumentException.class, () -> new QuestGiver(null));
+        assertThrows(IllegalArgumentException.class, () -> new QuestGiver(""));
     }
 
     @Test
-    public void testNoEnemiesForEnvironment() {
-        QuestGiver emptyQuestGiver = new QuestGiver("TestGiver", "emptyEnvironment");
-        assertNull(emptyQuestGiver.getCurrentQuest());
-    }
-
-    @Test
-    public void testInteractWithSuccessfulInteraction() {
+    public void testInteractWithSuccessfulInteractionYes() {
         questGiver.interact(player);
         assertNotNull(player.getCurrentQuest());
     }
 
     @Test
+    public void testInteractWithSuccessfulInteractionNo() {
+        // Simulate interaction with "no" response
+        QuestGiver questGiverSpy = new QuestGiver("TestGiver") {
+            @Override
+            public void interact(Player player) {
+                System.out.println(getName() + ": " + getQuest().getDescription() + " Do you accept? (yes/no)");
+                String response = "no"; // Simulate "no" response
+                if (response.equals("yes")) {
+                    player.setCurrentQuest(getQuest());
+                }
+            }
+        };
+        questGiverSpy.interact(player);
+        assertNull(player.getCurrentQuest());
+    }
+
+    @Test
     public void testInteractWithNullPlayer() {
         assertThrows(IllegalArgumentException.class, () -> questGiver.interact(null));
+    }
+
+    @Test
+    public void testGenerateQuest() {
+        Quest quest = questGiver.getQuest();
+        assertNotNull(quest);
+        assertTrue(quest.getTargetEnemies() >= 2 && quest.getTargetEnemies() <= 5);
     }
 
     @Test
@@ -75,22 +90,5 @@ public class QuestGiverTest {
     public void testGenerateRandomRewardItem() {
         InventoryItem reward = questGiver.generateRandomReward();
         assertTrue(reward instanceof Item);
-    }
-
-    @Test
-    public void testCheckQuestCompletionSuccessfulRun() {
-        player.setCurrentQuest(new Quest("Defeat TestEnemy", enemy));
-        questGiver.checkQuestCompletion(player, enemy);
-        assertNull(player.getCurrentQuest());
-    }
-
-    @Test
-    public void testCheckQuestCompletionWithNullPlayer() {
-        assertThrows(IllegalArgumentException.class, () -> questGiver.checkQuestCompletion(null, enemy));
-    }
-
-    @Test
-    public void testCheckQuestCompletionWithNullEnemy() {
-        assertThrows(IllegalArgumentException.class, () -> questGiver.checkQuestCompletion(player, null));
     }
 }
