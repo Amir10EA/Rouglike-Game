@@ -35,10 +35,6 @@ public class Weapon extends Equipment {
         return type;
     }
 
-    public int attack() {
-        return damage;
-    }
-
     public int calculateDamage() {
         return (int) (damage * attackSpeed);
     }

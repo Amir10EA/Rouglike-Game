@@ -100,4 +100,13 @@ public class QuestGiverTest {
         InventoryItem reward = questGiver.generateRandomReward(2);
         assertTrue(reward instanceof Item);
     }
+
+    @Test
+    public void testGenerateRandomRewardDefault() {
+        InventoryItem reward = questGiver.generateRandomReward(3);
+        assertTrue(reward instanceof Item);
+        assertEquals("Default Item", reward.getName());
+        assertEquals(1, ((Item) reward).getQuantity());
+        assertEquals(ItemType.MAGICAL_STONE, ((Item) reward).getItemType());
+    }
 }

@@ -70,6 +70,19 @@ public class CostTest {
     }
 
     @Test
+    public void testAddMaterialIncreasesQuantity() {
+        Item newItem = new Item("Iron Ingot", 3, ItemType.SMITHING_STONE);
+        defaultCost.addMaterial(newItem);
+
+        assertEquals(8, defaultCost.getMaterials().stream()
+                .filter(item -> item.getName().equals("Iron Ingot"))
+                .findFirst()
+                .get()
+                .getQuantity(), "Quantity of Iron Ingot should be increased by 3");
+    }
+
+
+    @Test
     public void testAddMaterialQuantityCannotBeZeroOrLess() {
         assertThrows(IllegalArgumentException.class, () -> {
             defaultCost.addMaterial(new Item("Wood", 0, ItemType.SMITHING_STONE));
@@ -80,6 +93,14 @@ public class CostTest {
         });
     }
 
+    @Test
+    public void testRemoveMaterialWhenQuantityReachesZero() {
+        Item itemToRemove = new Item("Iron Ingot", 5, ItemType.SMITHING_STONE);
+        defaultCost.removeMaterial(itemToRemove);
+
+        assertFalse(defaultCost.getMaterials().stream()
+                .anyMatch(item -> item.getName().equals("Iron Ingot")), "Iron Ingot should be removed from the materials list when its quantity reaches zero");
+    }
     @Test
     public void testRemoveMaterialQuantityCannotBeZeroOrNegative() {
         assertThrows(IllegalArgumentException.class, () -> {

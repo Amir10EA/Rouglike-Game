@@ -34,6 +34,7 @@ public class EquipmentTest {
         assertEquals(WeaponType.SWORD, weapon.getType());
         assertEquals(Rarity.UNCOMMON, weapon.getRarity()); 
         assertFalse(weapon.isBroken());
+        assertEquals(DEFAULT_COST, weapon.getCost());
     }
 
     @Test
@@ -49,6 +50,13 @@ public class EquipmentTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new Weapon("", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
                    WeaponType.SWORD, DEFAULT_COST);
+        });
+    }
+    @Test
+    public void testCostCannotBeNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Weapon("Invalid Weapon", DEFAULT_WEIGHT, DEFAULT_DURABILITY, DEFAULT_DAMAGE, DEFAULT_ATTACK_SPEED,
+                    WeaponType.SWORD, null);
         });
     }
 

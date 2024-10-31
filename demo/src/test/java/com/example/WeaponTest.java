@@ -102,6 +102,16 @@ public class WeaponTest {
     }
 
     @Test
+    public void testUseWhenWeaponIsBroken() {
+        Weapon physicalWeapon = createPhysicalWeapon();
+
+        while (!physicalWeapon.isBroken()) {
+            physicalWeapon.reduceDurability(10);
+        }
+        assertTrue(physicalWeapon.isBroken(), "Weapon should be broken");
+        assertEquals("The weapon is broken!", physicalWeapon.use());
+    }
+    @Test
     public void testCalculateDamage() {
         Weapon weapon = createPhysicalWeapon();
         assertEquals(EXPECTED_DPS, weapon.calculateDamage(),
