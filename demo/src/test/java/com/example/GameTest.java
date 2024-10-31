@@ -180,6 +180,13 @@ public class GameTest {
     }
 
     @Test
+    public void testApplyInvalidEnvironmentEffect() {
+        assertThrows(IllegalArgumentException.class, () -> player.applyEnvironmentEffect(EnvironmentType.UNKNOWN),
+                "Applying an invalid environment type should throw an IllegalArgumentException.");
+
+    }
+
+    @Test
     public void testClearEnvironmentEffect() {
         player.applyEnvironmentEffect(NEW_ENVIRONMENT);
         assertEquals(PLAYER_INITIAL_STRENGTH + STORMY_STRENGTH_BOOST, player.getStrength(),

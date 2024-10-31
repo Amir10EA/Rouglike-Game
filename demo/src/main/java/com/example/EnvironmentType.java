@@ -8,7 +8,8 @@ public enum EnvironmentType {
     LAVA,
     FOREST,
     ICY,
-    NORMAL;
+    NORMAL,
+    UNKNOWN; //for testing default case
 
     private static final EnvironmentType[] VALUES = values();
     private static final Random RANDOM = new Random();
