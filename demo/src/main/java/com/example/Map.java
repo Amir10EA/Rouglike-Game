@@ -17,14 +17,14 @@ public class Map {
         this.height = height;
         this.tiles = new Tile[width][height];
         this.environmentType = environmentType;
-        initializeMap(); 
+        initializeMap();
     }
 
     public void initializeMap() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    tiles[x][y] = new Tile(false, "wall"); 
+                    tiles[x][y] = new Tile(false, "wall");
                 } else {
                     tiles[x][y] = new Tile(true, "floor");
                 }
@@ -35,11 +35,11 @@ public class Map {
 
     private void placeDoors() {
         Random random = new Random();
-        int numDoors = random.nextInt(2) + 2; //2-3 dörrar
+        int numDoors = random.nextInt(2) + 2; // 2-3 dörrar
 
         for (int i = 0; i < numDoors; i++) {
-            int doorX = random.nextInt(width - 2) + 1; //innanför väggarna 
-            int doorY = random.nextInt(height - 2) + 1; 
+            int doorX = random.nextInt(width - 2) + 1; // innanför väggarna
+            int doorY = random.nextInt(height - 2) + 1;
 
             if (tiles[doorX][doorY].getTerrainType().equals("floor")) {
                 EnvironmentType newEnvironment = EnvironmentType.getRandomEnvironment();
@@ -51,14 +51,22 @@ public class Map {
     }
 
     private int getRandomMapDimension() {
-        return new Random().nextInt(11) + 5; //5-15
+        return new Random().nextInt(11) + 5; // 5-15
     }
 
     public Tile getTile(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             return tiles[x][y];
         }
-        return null; 
+        return null;
+    }
+
+    public void setTile(int x, int y, Tile tile) { // metod används endast för test
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            tiles[x][y] = tile;
+        } else {
+            throw new IndexOutOfBoundsException("Tile coordinates out of bounds.");
+        }
     }
 
     public EnvironmentType getEnvironmentType() {

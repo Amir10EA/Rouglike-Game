@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameTest {
 
     private static final int INITIAL_MAP_WIDTH = 10;
@@ -28,7 +31,8 @@ public class GameTest {
 
     @BeforeEach
     public void setUp() {
-        player = new Player("TestPlayer", PLAYER_INITIAL_HEALTH, PLAYER_INITIAL_STRENGTH, PLAYER_INITIAL_LEVEL, Race.HUMAN);
+        player = new Player("TestPlayer", PLAYER_INITIAL_HEALTH, PLAYER_INITIAL_STRENGTH, PLAYER_INITIAL_LEVEL,
+                Race.HUMAN);
         game = new Game(player); // map initializes in game constructor
         initialMap = game.getMap();
     }
@@ -184,5 +188,79 @@ public class GameTest {
         player.clearEnvironmentEffect();
         assertEquals(PLAYER_INITIAL_STRENGTH, player.getStrength(),
                 "Player strength should reset after clearing environment effect.");
+    }
+
+    @Test
+    public void testExploreMapRegularTile() {
+        List<String> movements = new ArrayList<>();
+        movements.add("D");
+
+        game.exploreMapForTest(movements);
+
+        int[] playerPosition = game.getPlayerPosition();
+        assertEquals(INITIAL_MAP_WIDTH / 2 + 1, playerPosition[0], "Player X should increase by 1.");
+        assertEquals(INITIAL_MAP_HEIGHT / 2, playerPosition[1], "Player Y should remain the same.");
+    }
+
+    @Test
+    public void testExploreMapTransitionToDoorTile() {
+        DoorTile doorTile = new DoorTile(NEW_ENVIRONMENT, NEW_MAP_WIDTH, NEW_MAP_HEIGHT);
+        game.getMap().setTile(INITIAL_MAP_WIDTH / 2, INITIAL_MAP_HEIGHT / 2 + 1, doorTile);
+
+        List<String> movements = new ArrayList<>();
+        movements.add("S");
+
+        game.exploreMapForTest(movements);
+
+        Map newMap = game.getMap();
+        assertEquals(NEW_ENVIRONMENT, newMap.getEnvironmentType(), "Player should transition to new environment.");
+        assertEquals(NEW_MAP_WIDTH, newMap.getWidth(), "New map width should match DoorTile property.");
+        assertEquals(NEW_MAP_HEIGHT, newMap.getHeight(), "New map height should match DoorTile property.");
+    }
+
+    @Test
+    public void testExploreMapBoundaryConditions() {
+        List<String> movements = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            movements.add("W");
+        }
+
+        game.exploreMapForTest(movements);
+        int[] playerPosition = game.getPlayerPosition();
+        assertEquals(1, playerPosition[1], "Player Y should be at the top boundary.");
+
+        movements.clear();
+        for (int i = 0; i < 6; i++) {
+            movements.add("A");
+        }
+
+        game.exploreMapForTest(movements);
+        playerPosition = game.getPlayerPosition();
+        assertEquals(1, playerPosition[0], "Player X should be at the left boundary.");
+    }
+
+    @Test
+    public void testExploreMapInvalidInput() {
+        List<String> movements = new ArrayList<>();
+        movements.add("X");
+        movements.add("D");
+
+        game.exploreMapForTest(movements);
+
+        int[] playerPosition = game.getPlayerPosition();
+        assertEquals(INITIAL_MAP_WIDTH / 2 + 1, playerPosition[0], "Player X should increase by 1.");
+        assertEquals(INITIAL_MAP_HEIGHT / 2, playerPosition[1], "Player Y should remain the same.");
+    }
+
+    @Test
+    public void testExploreMapQuitCommand() {
+        List<String> movements = new ArrayList<>();
+        movements.add("Q");
+
+        game.exploreMapForTest(movements);
+
+        int[] playerPosition = game.getPlayerPosition();
+        assertEquals(INITIAL_MAP_WIDTH / 2, playerPosition[0], "Player X should remain the same.");
+        assertEquals(INITIAL_MAP_HEIGHT / 2, playerPosition[1], "Player Y should remain the same.");
     }
 }

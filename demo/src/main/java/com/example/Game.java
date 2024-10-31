@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -48,8 +49,33 @@ public class Game {
 
             // Check if the player is on a DoorTile and handle the transition
             Tile tile = map.getTile(playerX, playerY);
-            if (tile instanceof DoorTile) {
-                DoorTile doorTile = (DoorTile) tile;
+            if (tile instanceof DoorTile doorTile) {
+                transitionToNewMap(doorTile);
+                centerPlayerOnMap();
+            } else {
+                System.out.println("Current terrain type: " + tile.getTerrainType());
+            }
+        }
+    }
+
+    public void exploreMapForTest(List<String> movements) {
+        for (String input : movements) {
+            input = input.toUpperCase();
+
+            //Handle movement
+            int[] newCoordinates = handleMovement(input, playerX, playerY, map.getWidth(), map.getHeight());
+            if (newCoordinates == null) {
+                System.out.println("Exiting game.");
+                return;
+            }
+            playerX = newCoordinates[0];
+            playerY = newCoordinates[1];
+
+            System.out.println("Player moved to (" + playerX + ", " + playerY + ")");
+
+            //Check if the player is on a DoorTile and handle the transition
+            Tile tile = map.getTile(playerX, playerY);
+            if (tile instanceof DoorTile doorTile) {
                 transitionToNewMap(doorTile);
                 centerPlayerOnMap();
             } else {
