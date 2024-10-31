@@ -223,4 +223,42 @@ public class PlayerTest {
         assertEquals(1, equippedArmor.size(), "Equipped armor list should contain one item.");
         assertEquals(helmet, equippedArmor.get(0), "Equipped armor should contain the helmet.");
     }
+       
+    @Test
+    public void testAddNullItem() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.addItem(null);
+        }, "Adding a null item should throw an IllegalArgumentException.");
+    }
+    
+    @Test
+    public void testRemoveNullItem() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.removeItem(null);
+        }, "Removing a null item should throw an IllegalArgumentException.");
+    }
+    
+    @Test
+    public void testUnequipNullWeapon() {
+        player.addItem(sword);
+        player.equipWeapon(sword);
+        player.unequipWeapon();
+        assertNull(player.getActiveWeapon(), "Active weapon should be null after unequipping.");
+    }
+    
+    @Test
+    public void testRemoveEquippedWeapon() {
+        player.addItem(sword);
+        player.equipWeapon(sword);
+        player.removeItem(sword);
+        assertNull(player.getActiveWeapon(), "Active weapon should be null after removing the equipped weapon.");
+    }
+    
+    @Test
+    public void testRemoveEquippedArmor() {
+        player.addItem(helmet);
+        player.equipArmor(helmet);
+        player.removeItem(helmet);
+        assertFalse(player.getEquippedArmor().contains(helmet), "Equipped armor should not contain the helmet after removal.");
+    }
 }
