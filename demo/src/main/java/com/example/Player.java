@@ -8,8 +8,8 @@ public class Player extends BaseCharacter {
 
     private int environmentalStrengthModifier = 0;
 
-    public Player(String name, int health, int strength, Race race) {
-        super(name, health, strength, race);
+    public Player(String name, int health, int strength, int level, Race race) {
+        super(name, health, strength, level, race);
         this.experience = 0;
         this.equipmentManager = new EquipmentManager();
     }

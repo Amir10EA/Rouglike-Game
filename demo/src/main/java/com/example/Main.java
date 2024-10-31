@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         Race race = Race.HUMAN;
-        Player player = new Player("Noor", 100, 10, race);
+        Player player = new Player("Noor", 100, 10, 1, race);
         System.out.println("Player created: " + player.getName());
         List<Item> swordMaterials = new ArrayList<>();
         swordMaterials.add(new Item("Iron", 2, ItemType.SMITHING_STONE));

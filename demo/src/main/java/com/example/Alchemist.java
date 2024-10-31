@@ -5,8 +5,8 @@ public class Alchemist extends BaseCharacter {
     private int potionCraftingSkill;
     private int bombThrowingSkill;
 
-    public Alchemist(String name, int health, int level, Race race) {
-        super(name, health, level, race);  
+    public Alchemist(String name, int health, int strength, int level, Race race) {
+        super(name, health, strength, level, race);  
         this.alchemySkill = calculateAlchemySkill(level);
         this.potionCraftingSkill = calculatePotionCraftingSkill(level);
         this.bombThrowingSkill = calculateBombThrowingSkill(level);

@@ -9,7 +9,7 @@ public class BaseCharacterTest {
 
     @BeforeEach
     public void setUp() {
-        character = new BaseCharacter("Hero", 100, 10,race);
+        character = new BaseCharacter("Hero", 100, 10, 1,race);
     }
 
     @Test
@@ -23,18 +23,18 @@ public class BaseCharacterTest {
 
     @Test
     public void testInitializeWithBoundaryHealthValues() {
-        BaseCharacter characterAtZeroHealth = new BaseCharacter("ZeroHealth", 0, 10, race);
+        BaseCharacter characterAtZeroHealth = new BaseCharacter("ZeroHealth", 0, 10, 1, race);
         assertEquals(0, characterAtZeroHealth.getHealth());
         assertFalse(characterAtZeroHealth.isAlive());
 
-        BaseCharacter characterAtMaxHealth = new BaseCharacter("MaxHealth", 100, 10, race);
+        BaseCharacter characterAtMaxHealth = new BaseCharacter("MaxHealth", 100, 10, 1, race);
         assertEquals(100, characterAtMaxHealth.getHealth());
         assertTrue(characterAtMaxHealth.isAlive());
     }
 
     @Test
     public void testInitializeWithNegativeHealth() {
-        BaseCharacter characterWithNegativeHealth = new BaseCharacter("NegativeHealth", -10, 10,race);
+        BaseCharacter characterWithNegativeHealth = new BaseCharacter("NegativeHealth", -10, 10, 1,race);
         assertEquals(0, characterWithNegativeHealth.getHealth());
         assertFalse(characterWithNegativeHealth.isAlive());
     }
@@ -101,7 +101,7 @@ public class BaseCharacterTest {
 
     @Test
     public void testAttack() {
-        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5,race);
+        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, 1,race);
         character.attack(enemy);
         assertEquals(90, enemy.getHealth());
     }
@@ -122,7 +122,7 @@ public class BaseCharacterTest {
     @Test
     public void testAttackWithZeroStrength() {
         character.setStrength(0);
-        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, race);
+        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, 1, race);
         character.attack(enemy);
         assertEquals(100, enemy.getHealth());
     }
@@ -132,14 +132,14 @@ public class BaseCharacterTest {
     public void testDeadCharacterCannotAttack() {
         character.takeDamage(100);
         assertFalse(character.isAlive());
-        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5,race);
+        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, 1,race);
         character.attack(enemy);
         assertEquals(100, enemy.getHealth()); // Dead characters should not attack
     }
 
     @Test
     public void testEnemyDiesWhenHealthReachesZero() {
-        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, race);
+        BaseCharacter enemy = new BaseCharacter("Enemy", 100, 5, 1, race);
         character.attack(enemy);
         enemy.takeDamage(95);
         assertFalse(enemy.isAlive());
@@ -148,7 +148,7 @@ public class BaseCharacterTest {
     @Test
     public void testNullChecks() {
         assertThrows(NullPointerException.class, () -> {
-            new BaseCharacter(null, 100, 10, race);
+            new BaseCharacter(null, 100, 10, 1, race);
         });
     }
 

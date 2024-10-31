@@ -8,7 +8,7 @@ public class BaseCharacter{
     private int level;
     private Race race;
 
-    public BaseCharacter(String name, int health, int strength, Race race) {
+    public BaseCharacter(String name, int health, int strength, int level, Race race) {
         if (name == null) {
             throw new NullPointerException("Name cannot be null");
         }
@@ -16,6 +16,7 @@ public class BaseCharacter{
         this.health = Math.min(Math.max(health, 0), 100); 
         this.maxHealth = 100; 
         this.strength = strength;
+        this.level = level;
         this.race  = race;
     }
 

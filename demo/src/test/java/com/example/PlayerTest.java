@@ -17,7 +17,7 @@ public class PlayerTest {
 
     @BeforeEach
     public void setUp() {
-        player = new Player("Hero", 100, 10, race);
+        player = new Player("Hero", 100, 10, 1, race);
 
         List<Item> swordMaterials = List.of(
             new Item("Iron", 2, ItemType.SMITHING_STONE)
