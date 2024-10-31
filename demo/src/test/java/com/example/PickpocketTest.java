@@ -7,25 +7,25 @@ public class PickpocketTest {
 
     @Test
     public void testHumanOpenLock() {
-        Pickpocket humanPickpocket = new Pickpocket("Human", 100, 1, Race.HUMAN);
+        Pickpocket humanPickpocket = new Pickpocket("Human", 100, 10, 1, Race.HUMAN);
         assertTrue(humanPickpocket.openLock(2), "Human Pickpocket should open lock with difficulty 2");
     }
 
     @Test
     public void testElfOpenLock() {
-        Pickpocket elfPickpocket = new Pickpocket("Elf", 100, 1, Race.ELF);
+        Pickpocket elfPickpocket = new Pickpocket("Elf", 100, 10, 1, Race.ELF);
         assertTrue(elfPickpocket.openLock(2), "Elf Pickpocket should open lock with difficulty 2");
     }
 
     @Test
     public void testGoblinOpenLock() {
-        Pickpocket goblinPickpocket = new Pickpocket("Goblin", 100, 1, Race.GOBLIN);
+        Pickpocket goblinPickpocket = new Pickpocket("Goblin", 100, 10, 1, Race.GOBLIN);
         assertTrue(goblinPickpocket.openLock(2), "Human Pickpocket should open lock with difficulty 2");
     }
 
     @Test
     public void testFailToOpenLock() {
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
         assertFalse(humanPickpocket.openLock(7), "Human should not be able to open a lock with difficulty 5");
     }
 
@@ -35,9 +35,9 @@ public class PickpocketTest {
         int maxElfLockDifficulty = 5; 
         int maxGoblinLockDifficulty = 3;
 
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
-        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 1, Race.ELF);
-        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
+        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10, 1, Race.GOBLIN);
 
         assertAll("Check max lock difficulty for level 1 players of each race",
         () -> assertTrue(humanPickpocket.openLock(maxHumanLockDifficulty),
@@ -51,9 +51,9 @@ public class PickpocketTest {
 
     @Test
     public void testSneakPastEnemyWithAwarenessLevelOne() {
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
-        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 1, Race.ELF);
-        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
+        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10, 1, Race.GOBLIN);
 
         int npcAwareness = 1;
         
@@ -69,9 +69,9 @@ public class PickpocketTest {
 
     @Test
     public void testSneakPastEnemyWithAwarenessLevelFive() {
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
-        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 1, Race.ELF);
-        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
+        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10, 1, Race.GOBLIN);
 
         int npcAwareness = 5;
         
@@ -87,9 +87,9 @@ public class PickpocketTest {
 
     @Test
     public void testPickPocketing() {
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
-        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 1, Race.ELF);
-        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
+        Pickpocket elfPickpocket = new Pickpocket("elfPickpocket", 100, 10, 1, Race.ELF);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10,1, Race.GOBLIN);
 
         int npcAwareness = 3;
 
@@ -105,7 +105,7 @@ public class PickpocketTest {
 
     @Test
     public void testLevelUpSkillsForHuman() {
-        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 1, Race.HUMAN);
+        Pickpocket humanPickpocket = new Pickpocket("HumanPickpocket", 100, 10, 1, Race.HUMAN);
         humanPickpocket.setLevel(2);
 
         int expectedLockPickingSkill = 6;  
@@ -124,7 +124,7 @@ public class PickpocketTest {
    
     @Test
     public void testLevelUpSkillsForElf() {
-        Pickpocket elfPickpocket = new Pickpocket("ElfPickpocket", 100, 1, Race.ELF);
+        Pickpocket elfPickpocket = new Pickpocket("ElfPickpocket", 100, 10, 1, Race.ELF);
         elfPickpocket.setLevel(2);
 
         int expectedLockPickingSkill = 7;
@@ -143,7 +143,7 @@ public class PickpocketTest {
 
     @Test
     public void testLevelUpSkillsForGoblin() {
-        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket goblinPickpocket = new Pickpocket("GoblinPickpocket", 100, 10, 1, Race.GOBLIN);
         goblinPickpocket.setLevel(2);
 
         int expectedLockPickingSkill = 5;
@@ -162,7 +162,7 @@ public class PickpocketTest {
 
     @Test
     public void testToString() {
-        Pickpocket pickpocket = new Pickpocket("Pickpocket", 100, 1, Race.GOBLIN);
+        Pickpocket pickpocket = new Pickpocket("Pickpocket", 100, 10, 1, Race.GOBLIN);
 
         String expected = "Pickpocket{name='Pickpocket', health=100, level=1, race=GOBLIN(strength=3, speed=1, intelligence=1), pickpocketingSkill=5, lockpickingSkill=3, sneakingSkill=4}";
         assertEquals(expected, pickpocket.toString(), "toString should return correct string representation of Pickpocket");

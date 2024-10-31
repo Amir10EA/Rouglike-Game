@@ -7,7 +7,7 @@ public class AlchemistTest {
 
     @Test
     public void testAlchemyAndPotionSkillsElfLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 1, Race.ELF);
+        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 10, 1, Race.ELF);
         int expectedAlchemySkill = 6;
         int expectedPotionCraftingSkill = 7;
 
@@ -17,7 +17,7 @@ public class AlchemistTest {
 
     @Test
     public void testAlchemyAndPotionSkillsGoblinLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 1, Race.GOBLIN);
+        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 10, 1, Race.GOBLIN);
         int expectedAlchemySkill = 4;
         int expectedPotionCraftingSkill = 5;
 
@@ -27,7 +27,7 @@ public class AlchemistTest {
 
     @Test
     public void testAlchemyAndPotionSkillsHumanLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 1, Race.HUMAN);
+        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 10, 1, Race.HUMAN);
         int expectedAlchemySkill = 5;
         int expectedPotionCraftingSkill = 6;
 
@@ -37,7 +37,7 @@ public class AlchemistTest {
 
     @Test
     public void testBombThrowingSkillElfLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 1, Race.ELF);
+        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 10, 1, Race.ELF);
         int expectedBombThrowingSkill = 3;
 
         assertEquals(expectedBombThrowingSkill, alchemist.getBombThrowingSkill(), "Bomb throwing skill should be 3 for level 1 ELF");
@@ -45,7 +45,7 @@ public class AlchemistTest {
 
     @Test
     public void testBombThrowingSkillGoblinLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 1, Race.GOBLIN);
+        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 10, 1, Race.GOBLIN);
         int expectedBombThrowingSkill = 5;
 
         assertEquals(expectedBombThrowingSkill, alchemist.getBombThrowingSkill(), "Bomb throwing skill should be 5 for level 1 GOBLIN");
@@ -53,7 +53,7 @@ public class AlchemistTest {
 
     @Test
     public void testBombThrowingSkillHumanLevel1() {
-        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 1, Race.HUMAN);
+        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 10, 1, Race.HUMAN);
         int expectedBombThrowingSkill = 4;
 
         assertEquals(expectedBombThrowingSkill, alchemist.getBombThrowingSkill(), "Bomb throwing skill should be 4 for level 1 HUMAN");
@@ -61,7 +61,7 @@ public class AlchemistTest {
 
     @Test
     public void testLevelUpElf() {
-        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 1, Race.ELF);
+        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 10, 1, Race.ELF);
         alchemist.setLevel(2);
 
         int expectedBombThrowingSkill = 5;
@@ -77,7 +77,7 @@ public class AlchemistTest {
 
     @Test
     public void testLevelUpGoblin() {
-        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 1, Race.GOBLIN);
+        Alchemist alchemist = new Alchemist("Alchemist Goblin", 100, 10, 1, Race.GOBLIN);
         alchemist.setLevel(2);
 
         int expectedBombThrowingSkill = 7;
@@ -93,7 +93,7 @@ public class AlchemistTest {
 
     @Test
     public void testLevelUpHuman() {
-        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 1, Race.HUMAN);
+        Alchemist alchemist = new Alchemist("Alchemist Human", 100, 10, 1, Race.HUMAN);
         alchemist.setLevel(2);
 
         int expectedBombThrowingSkill = 6;
@@ -109,7 +109,7 @@ public class AlchemistTest {
 
     @Test
     public void testToString() {
-        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 1, Race.ELF);
+        Alchemist alchemist = new Alchemist("Alchemist Elf", 100, 10, 1, Race.ELF);
 
         String expected = "Alchemist{name='Alchemist Elf', health=100, level=1, race=ELF(strength=1, speed=2, intelligence=3), alchemySkill=6, potionCraftingSkill=7, bombThrowingSkill=3}";
         assertEquals(expected, alchemist.toString(), "toString should return correct string representation of Alchemist");

@@ -4,8 +4,8 @@ public class Enemy extends BaseCharacter {
     private EquipmentManager equipmentManager;
     private int xp; 
 
-    public Enemy(String name, int health, int strength, Race race, int initialXp) {
-        super(name, health, strength, race);
+    public Enemy(String name, int health, int strength, int level, Race race, int initialXp) {
+        super(name, health, strength, level, race);
         this.equipmentManager = new EquipmentManager();
         this.xp = initialXp;
     }

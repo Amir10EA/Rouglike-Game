@@ -14,6 +14,7 @@ public class GameTest {
     private static final String NEW_ENVIRONMENT = "stormy";
     private static final int PLAYER_INITIAL_HEALTH = 100;
     private static final int PLAYER_INITIAL_STRENGTH = 10;
+    private static final int PLAYER_INITIAL_LEVEL = 1;
     private static final int LAVA_DAMAGE = 5;
     private static final int STORMY_STRENGTH_BOOST = 2;
 
@@ -23,7 +24,7 @@ public class GameTest {
 
     @BeforeEach
     public void setUp() {
-        player = new Player("TestPlayer", PLAYER_INITIAL_HEALTH, PLAYER_INITIAL_STRENGTH, Race.HUMAN);
+        player = new Player("TestPlayer", PLAYER_INITIAL_HEALTH, PLAYER_INITIAL_STRENGTH, PLAYER_INITIAL_LEVEL, Race.HUMAN);
         game = new Game(player); // map initializes in game constructor
         initialMap = game.getMap();
     }
