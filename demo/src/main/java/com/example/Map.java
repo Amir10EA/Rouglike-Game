@@ -7,7 +7,7 @@ public class Map {
     private int height;
     private Tile[][] tiles;
     private EnvironmentType environmentType;
-    private static final int MIN_SIZE = 3;
+    private static final int MIN_SIZE = 5;
 
     public Map(int width, int height, EnvironmentType environmentType) {
         if (width < MIN_SIZE || height < MIN_SIZE) {

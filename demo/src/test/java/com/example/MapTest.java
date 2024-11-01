@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 public class MapTest {
 
     private static final int NORMAL_MAP_SIZE = 10;
-    private static final int MIN_MAP_SIZE = 3;
+    private static final int MIN_MAP_SIZE = 5;
     private static final int TOO_SMALL_MAP_SIZE = 2;
     private static final int LARGE_MAP_SIZE = 1000;
-    private static final int NON_SQUARE_MAP_WIDTH = 3;
+    private static final int NON_SQUARE_MAP_WIDTH = 8;
     private static final int NON_SQUARE_MAP_HEIGHT = 5;
     private static final int MIN_DOORS = 2;
     private static final int MAX_DOORS = 3;
@@ -29,7 +29,7 @@ public class MapTest {
         assertNotNull(map.getTile(NORMAL_MAP_SIZE - 1, NORMAL_MAP_SIZE - 1));
     }
 
-    // min map storlek: 3x3.
+    // min map storlek: 5x5.
     @Test
     public void testMinimumSizeMap() {
         Map map = new Map(MIN_MAP_SIZE, MIN_MAP_SIZE, EnvironmentType.NORMAL);
@@ -42,7 +42,7 @@ public class MapTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Map(TOO_SMALL_MAP_SIZE, NORMAL_MAP_SIZE, EnvironmentType.NORMAL);
         });
-        assertEquals("Map size must be at least 3x3", exception.getMessage());
+        assertEquals("Map size must be at least 5x5", exception.getMessage());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class MapTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Map(NORMAL_MAP_SIZE, TOO_SMALL_MAP_SIZE, EnvironmentType.NORMAL);
         });
-        assertEquals("Map size must be at least 3x3", exception.getMessage());
+        assertEquals("Map size must be at least 5x5", exception.getMessage());
     }
 
     @Test
