@@ -13,6 +13,7 @@ public class MapTest {
     private static final int NON_SQUARE_MAP_HEIGHT = 5;
     private static final int MIN_DOORS = 2;
     private static final int MAX_DOORS = 3;
+    private static final int NUMBER_OF_ENEMIES = 3;
 
     @Test
     public void testMapInitialization() {
@@ -150,6 +151,84 @@ public class MapTest {
         for (int y = 0; y < NORMAL_MAP_SIZE; y++) {
             assertFalse(map.getTile(0, y).isWalkable());
             assertFalse(map.getTile(NORMAL_MAP_SIZE - 1, y).isWalkable());
+        }
+    }
+
+    @Test
+    public void testQuestGiverPlacement() {
+        Map map = new Map(NORMAL_MAP_SIZE, NORMAL_MAP_SIZE, EnvironmentType.NORMAL);
+        boolean questGiverFound = false;
+
+        for (int x = 1; x < NORMAL_MAP_SIZE - 1; x++) {
+            for (int y = 1; y < NORMAL_MAP_SIZE - 1; y++) {
+                Tile tile = map.getTile(x, y);
+                if (tile instanceof QuestGiverTile) {
+                    questGiverFound = true;
+                    assertInstanceOf(QuestGiverTile.class, tile, "Quest Giver Tile should be placed correctly.");
+                    break;
+                }
+            }
+        }
+        assertTrue(questGiverFound, "There should be a Quest Giver on the map.");
+    }
+
+    @Test
+    public void testEnemiesPlacement() {
+        Map map = new Map(NORMAL_MAP_SIZE, NORMAL_MAP_SIZE, EnvironmentType.NORMAL);
+        int enemyCount = 0;
+
+        for (int x = 1; x < NORMAL_MAP_SIZE - 1; x++) {
+            for (int y = 1; y < NORMAL_MAP_SIZE - 1; y++) {
+                Tile tile = map.getTile(x, y);
+                if (tile instanceof EnemyTile) {
+                    enemyCount++;
+                    assertInstanceOf(EnemyTile.class, tile, "EnemyTile should be placed correctly.");
+                    assertNotNull(((EnemyTile) tile).getEnemy(), "Enemy should be present in EnemyTile.");
+                }
+            }
+        }
+        assertEquals(NUMBER_OF_ENEMIES, enemyCount,
+                "There should be exactly " + NUMBER_OF_ENEMIES + " enemies on the map.");
+    }
+
+    @Test
+    public void testQuestGiverDoesNotOverlapWithDoors() {
+        Map map = new Map(NORMAL_MAP_SIZE, NORMAL_MAP_SIZE, EnvironmentType.NORMAL);
+        Tile questGiverTile = null;
+
+        for (int x = 1; x < NORMAL_MAP_SIZE - 1; x++) {
+            for (int y = 1; y < NORMAL_MAP_SIZE - 1; y++) {
+                Tile tile = map.getTile(x, y);
+                if (tile instanceof QuestGiverTile) {
+                    questGiverTile = tile;
+                    break;
+                }
+            }
+        }
+
+        assertNotNull(questGiverTile, "QuestGiverTile should exist.");
+        for (int x = 1; x < NORMAL_MAP_SIZE - 1; x++) {
+            for (int y = 1; y < NORMAL_MAP_SIZE - 1; y++) {
+                if (map.getTile(x, y) instanceof DoorTile) {
+                    assertNotSame(map.getTile(x, y), questGiverTile,
+                            "QuestGiverTile should not overlap with DoorTile.");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testEnemyDoesNotOverlapWithQuestGiverOrDoor() {
+        Map map = new Map(NORMAL_MAP_SIZE, NORMAL_MAP_SIZE, EnvironmentType.NORMAL);
+
+        for (int x = 1; x < NORMAL_MAP_SIZE - 1; x++) {
+            for (int y = 1; y < NORMAL_MAP_SIZE - 1; y++) {
+                Tile tile = map.getTile(x, y);
+                if (tile instanceof EnemyTile) {
+                    assertFalse(tile instanceof QuestGiverTile, "EnemyTile should not overlap with QuestGiverTile.");
+                    assertFalse(tile instanceof DoorTile, "EnemyTile should not overlap with DoorTile.");
+                }
+            }
         }
     }
 

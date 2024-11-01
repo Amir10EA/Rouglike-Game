@@ -8,10 +8,21 @@ public class Game {
     private Map map;
     private int playerX;
     private int playerY;
+    private static final int INITIAL_HEALTH = 100;
+    private static final int INITIAL_MAP_WIDTH = 10;
+    private static final int INITIAL_MAP_HEIGHT = 10;
+    private static final EnvironmentType INITIAL_ENVIRONMENT = EnvironmentType.NORMAL;
 
     public Game(Player player) {
         this.player = player;
-        this.map = initializeMap(10, 10, EnvironmentType.NORMAL); 
+        resetGame();
+    }
+
+    void resetGame() {
+        System.out.println("Starting a new game...");
+        this.map = initializeMap(INITIAL_MAP_WIDTH, INITIAL_MAP_HEIGHT, INITIAL_ENVIRONMENT);
+        player.setHealth(INITIAL_HEALTH);
+        player.cancelCurrentQuest(); // Reset quest status
         centerPlayerOnMap();
     }
 
@@ -49,12 +60,53 @@ public class Game {
 
             // Check if the player is on a DoorTile and handle the transition
             Tile tile = map.getTile(playerX, playerY);
-            if (tile instanceof DoorTile doorTile) {
-                transitionToNewMap(doorTile);
-                centerPlayerOnMap();
+            handleTile(tile);
+        }
+    }
+
+    void handleTile(Tile tile) {
+        if (tile instanceof DoorTile) {
+            transitionToNewMap((DoorTile) tile);
+            centerPlayerOnMap();
+        } else if (tile instanceof QuestGiverTile) {
+            QuestGiverTile questTile = (QuestGiverTile) tile;
+            questTile.getQuestGiver().interact(player);
+        } else if (tile instanceof EnemyTile) {
+            EnemyTile enemyTile = (EnemyTile) tile;
+            Enemy enemy = enemyTile.getEnemy();
+            if (enemy.getRace() != player.getRace()) {
+                startBattle(enemy);
             } else {
-                System.out.println("Current terrain type: " + tile.getTerrainType());
+                startAllyEncounter(enemy);
             }
+        } else {
+            System.out.println("Current terrain type: " + tile.getTerrainType());
+        }
+    }
+
+    void startAllyEncounter(Enemy friendlyEnemy) {
+        AllyEncounter encounter = new AllyEncounter(player, friendlyEnemy);
+        encounter.startEncounter();
+    }
+
+    void startBattle(Enemy enemy) {
+        Battle battle = new Battle(player, enemy);
+        boolean playerSurvived = battle.startBattle();
+        if (playerSurvived) {
+            System.out.println("Enemy defeated!");
+            progressQuestIfApplicable();
+        } else {
+            System.out.println("Player was defeated! Respawning...");
+            resetGame(); // Full game reset on death
+        }
+    }
+
+    void progressQuestIfApplicable() {
+        if (player.getCurrentQuest() != null) {
+            player.getCurrentQuest().enemyDefeated(player);
+            System.out.println("Quest progression: " + player.getCurrentQuest().getEnemiesDefeated() + "/" + player.getCurrentQuest().getTargetEnemies());
+        } else {
+            System.out.println("No active quest to progress.");
         }
     }
 

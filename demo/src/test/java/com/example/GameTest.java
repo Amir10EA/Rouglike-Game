@@ -106,6 +106,111 @@ public class GameTest {
     }
 
     @Test
+    public void testGameReset() {
+        game.resetGame();
+
+        Map map = game.getMap();
+        assertEquals(INITIAL_MAP_WIDTH, map.getWidth(), "Map width should be reset.");
+        assertEquals(INITIAL_MAP_HEIGHT, map.getHeight(), "Map height should be reset.");
+        assertEquals(INITIAL_ENVIRONMENT, map.getEnvironmentType(), "Map environment should be reset.");
+
+        assertEquals(PLAYER_INITIAL_HEALTH, player.getHealth(), "Player health should be reset.");
+        assertNull(player.getCurrentQuest(), "Player quest should be reset.");
+    }
+
+    @Test
+    public void testHandleTileWithQuestGiverTileYesResponse() {
+        QuestGiver questGiverWithYesResponse = new QuestGiver("Quest Giver") {
+            @Override
+            public void interact(Player player) {
+                System.out.println(getName() + ": " + getQuest().getDescription() + " Do you accept? (yes/no)");
+                String response = "yes";
+                if ("yes".equals(response)) {
+                    player.setCurrentQuest(getQuest());
+                }
+            }
+        };
+
+        QuestGiverTile questTile = new QuestGiverTile(questGiverWithYesResponse);
+
+        game.handleTile(questTile);
+
+        assertNotNull(player.getCurrentQuest(), "Player should receive the quest when responding 'yes' to QuestGiver.");
+    }
+
+    @Test
+    public void testHandleTileWithQuestGiverTileNoResponse() {
+        QuestGiver questGiverWithNoResponse = new QuestGiver("Quest Giver") {
+            @Override
+            public void interact(Player player) {
+                System.out.println(getName() + ": " + getQuest().getDescription() + " Do you accept? (yes/no)");
+                String response = "no";
+                if ("yes".equals(response)) {
+                    player.setCurrentQuest(getQuest());
+                }
+            }
+        };
+
+        QuestGiverTile questTile = new QuestGiverTile(questGiverWithNoResponse);
+
+        game.handleTile(questTile);
+
+        assertNull(player.getCurrentQuest(), "Player should not receive the quest when responding 'no' to QuestGiver.");
+    }
+
+    @Test
+    public void testAllyEncounterCollectResources() {
+        Enemy friendlyEnemy = new Enemy("Elf", 40, 8, 1, player.getRace(), 10);
+
+        AllyEncounter encounter = new AllyEncounter(player, friendlyEnemy) {
+            @Override
+            public void startEncounter() {
+                System.out.println("Simulated encounter with friendly enemy.");
+                collectResources();
+            }
+        };
+
+        encounter.startEncounter();
+
+        assertTrue(player.getEquipmentManager().getInventory().stream()
+                .anyMatch(item -> item.getName().equals("Armor Stone")),
+                "Player should have collected resources from the ally encounter.");
+    }
+
+    @Test
+    public void testAllyEncounterProgressQuest() {
+        Enemy friendlyEnemy = new Enemy("Elf", 40, 8, 1, player.getRace(), 10);
+        Quest quest = new Quest("Defeat enemies", 3);
+        player.setCurrentQuest(quest);
+
+        AllyEncounter encounter = new AllyEncounter(player, friendlyEnemy) {
+            @Override
+            public void startEncounter() {
+                System.out.println("Simulated encounter with friendly enemy.");
+                progressQuest();
+            }
+        };
+
+        encounter.startEncounter();
+
+        assertEquals(1, player.getCurrentQuest().getEnemiesDefeated(),
+                "Player's quest should progress after selecting to progress the quest in the ally encounter.");
+    }
+
+    @Test
+    public void testProgressQuestIfApplicable() {
+        Quest quest = new Quest("Defeat Goblins", 2); 
+        player.setCurrentQuest(quest);
+
+        game.progressQuestIfApplicable();
+
+        Quest playerQuest = player.getCurrentQuest();
+        assertNotNull(playerQuest, "Player should have an active quest.");
+        assertEquals(1, playerQuest.getEnemiesDefeated(), "Quest progress should reflect one enemy defeated.");
+        assertFalse(playerQuest.isCompleted(), "Quest should not be marked as completed yet.");
+    }
+
+    @Test
     public void testInvalidMovementInput() {
         int[] startPosition = game.getPlayerPosition();
         int[] resultPosition = game.handleMovement("X", startPosition[0], startPosition[1], INITIAL_MAP_WIDTH,

@@ -46,4 +46,26 @@ public class TileTest {
         assertEquals(7, doorTile.getNextMapWidth());
         assertEquals(8, doorTile.getNextMapHeight());
     }
+
+    @Test
+    public void testQuestGiverTileInitialization() {
+        QuestGiver questGiver = new QuestGiver("Test Quest Giver");
+        QuestGiverTile questGiverTile = new QuestGiverTile(questGiver);
+        assertTrue(questGiverTile.isWalkable(), "QuestGiverTile should be walkable.");
+        assertEquals("questgiver", questGiverTile.getTerrainType(), "QuestGiverTile terrain type should be questgiver.");
+        assertNotNull(questGiverTile.getQuestGiver(), "QuestGiverTile should have a QuestGiver.");
+        assertEquals("Test Quest Giver", questGiverTile.getQuestGiver().getName(), "QuestGiver name should match.");
+    }
+
+    @Test
+    public void testEnemyTileInitialization() {
+        Enemy enemy = new Enemy("Test Enemy", 50, 10, 1, Race.GOBLIN, 10);
+        EnemyTile enemyTile = new EnemyTile(enemy);
+        assertTrue(enemyTile.isWalkable(), "EnemyTile should be walkable.");
+        assertEquals("enemy", enemyTile.getTerrainType(), "EnemyTile terrain type should be enemy.");
+        assertNotNull(enemyTile.getEnemy(), "EnemyTile should have an Enemy.");
+        assertEquals("Test Enemy", enemyTile.getEnemy().getName(), "Enemy name should match.");
+        assertEquals(50, enemyTile.getEnemy().getHealth(), "Enemy health should match.");
+        assertEquals(Race.GOBLIN, enemyTile.getEnemy().getRace(), "Enemy race should be GOBLIN.");
+    }
 }

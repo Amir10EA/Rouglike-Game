@@ -31,6 +31,8 @@ public class Map {
             }
         }
         placeDoors();
+        placeQuestGiver();
+        placeEnemies(3);
     }
 
     private void placeDoors() {
@@ -49,6 +51,34 @@ public class Map {
             }
         }
     }
+
+    private void placeQuestGiver() {
+        Random random = new Random();
+        int x, y;
+        do {
+            x = random.nextInt(width - 2) + 1;
+            y = random.nextInt(height - 2) + 1;
+        } while (tiles[x][y] instanceof DoorTile || tiles[x][y] instanceof QuestGiverTile);
+    
+        tiles[x][y] = new QuestGiverTile(new QuestGiver("Quest Giver"));
+        System.out.println("Placed Quest Giver at (" + x + ", " + y + ")");
+    }
+    
+
+    private void placeEnemies(int numberOfEnemies) {
+        Random random = new Random();
+        for (int i = 0; i < numberOfEnemies; i++) {
+            int x, y;
+            do {
+                x = random.nextInt(width - 2) + 1;
+                y = random.nextInt(height - 2) + 1;
+            } while (tiles[x][y] instanceof DoorTile || tiles[x][y] instanceof QuestGiverTile || tiles[x][y] instanceof EnemyTile);
+    
+            tiles[x][y] = new EnemyTile(new Enemy("Enemy " + (i + 1), 50, 10, 1, Race.getRandomRace(), 10));
+            System.out.println("Placed Enemy " + (i + 1) + " at (" + x + ", " + y + ")");
+        }
+    }
+    
 
     private int getRandomMapDimension() {
         return new Random().nextInt(11) + 5; // 5-15

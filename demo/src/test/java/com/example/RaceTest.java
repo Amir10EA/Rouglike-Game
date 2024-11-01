@@ -1,6 +1,10 @@
 package com.example;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 public class RaceTest {
@@ -67,6 +71,21 @@ public class RaceTest {
         };
 
         assertArrayEquals(raceConstans, Race.values(), "Race enum does not have the expected constants.");
+    }
+
+    @Test
+    public void testGetRandomRace() {
+        Set<Race> raceResults = new HashSet<>();
+        int attempts = 100; 
+
+        for (int i = 0; i < attempts; i++) {
+            raceResults.add(Race.getRandomRace());
+            if (raceResults.size() == Race.values().length) {
+                break;
+            }
+        }
+
+        assertEquals(RACE_VALUES_LENGTH, raceResults.size(), "getRandomRace should return all Race constants over multiple calls.");
     }
 
     @Test

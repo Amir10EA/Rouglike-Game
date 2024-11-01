@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.Random;
+
 public enum Race {
     HUMAN(2, 1, 2), 
     ELF(1, 2, 3), 
@@ -8,6 +10,9 @@ public enum Race {
     private final int speed;
     private final int strength;
     private final int intelligence;
+    
+    private static final Race[] VALUES = values();
+    private static final Random RANDOM = new Random();
 
     Race(int strength, int speed, int intelligence){
         this.speed = speed;
@@ -25,6 +30,10 @@ public enum Race {
 
     public int getIntelligence(){
         return intelligence;
+    }
+
+    public static Race getRandomRace() {
+        return VALUES[RANDOM.nextInt(VALUES.length)];
     }
     
     @Override
